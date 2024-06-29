@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="calculator.css" />
+    <title>Scientific Calculator</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Calculator</h1>
+
+      <input type="text" id="display" />
+      <div class="buttons">
+        <button onclick="goToScientific()" class="btn">Sc</button>
+        <button onclick="clearDisplay()" class="btn">AC</button>
+        <button onclick="deleteLast()" class="btn">DEL</button>
+        <button class="btn" onclick="displayall('%')">%</button>
+        </div>
+      
+
+        <div class="buttonss">
+          <button class="btn" onclick="displayall(7)">7</button>
+          <button class="btn" onclick="displayall(8)">8</button>
+          <button class="btn" onclick="displayall(9)">9</button>
+          <button class="btn" onclick="displayall('/')">/</button>
+        </div>
+        <div class="buttonss">
+          <button class="btn" onclick="displayall(4)">4</button>
+          <button class="btn" onclick="displayall(5)">5</button>
+          <button class="btn" onclick="displayall(6)">6</button>
+          <button class="btn" onclick="displayall('*')">*</button>
+        </div>
+        <div class="buttonss">
+          <button class="btn" onclick="displayall(3)">3</button>
+          <button class="btn" onclick="displayall(2)">2</button>
+          <button class="btn" onclick="displayall(1)">1</button>
+          <button class="btn" onclick="displayall('+')">+</button>
+        </div>
+        <div class="buttonss">
+          <button class="btn" onclick="displayall('.')">.</button>
+          <button class="btn" onclick="displayall('00')">00</button>
+          <button class="btn" onclick="displayall('0')">0</button>
+          <button class="btn" onclick="calculator()">=</button>
+        </div>
+          <div class="buttonss">
+          <button class="btn" onclick="displayall('(')">(</button>
+          <button class="btn" onclick="displayall(')')">)</button>
+          <button class="btn" onclick="displayall('1/x')">1/x</button>
+          <button class="btn" onclick="displayall('+/-')">+/-</button>
+          
+        
+        
+          
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="calculator.js"></script>
+</html>
