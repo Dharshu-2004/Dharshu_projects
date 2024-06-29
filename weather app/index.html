@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--<meta charset="UTF-8">-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather App</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="script.js"></script>
+    <style>
+      .container {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh; /* Ensure the container covers the entire viewport */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+
+      .result {
+        background-color: rgba(
+          255,
+          255,
+          255,
+          0.7
+        ); /* Add a semi-transparent background for better readability */
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+      }
+
+      /* Add additional styling as needed */
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="nav">
+        <li><button>Home</button></li>
+        <li><button>Contact</button></li>
+        <li><button>Map</button></li>
+        <li><button>Get App</button></li>
+      </div>
+      <div>
+        <h1 id="heading">Weather Manager</h1>
+        <input type="text" name="" placeholder="search city" id="city-input" />
+        <br />
+        <br />
+        <input type="button" onclick="searchCity()" value="Search" />
+        <br />
+      </div>
+      <div class="result">
+        <h2 id="city-name">---------</h2>
+        <div>
+          <h1 id="weather-type">-----------</h1>
+          <div>
+            <h3>Temp:<span id="temp"></span><span>°F</span></h3>
+            <h3>Min Temp:<span id="min-temp"></span><span>°F</span></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

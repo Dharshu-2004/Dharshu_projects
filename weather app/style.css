@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+ 
+
+.container{
+    background-color: steelblue;
+    padding: 40px;
+    border-radius: 10px;
+    margin: 700px 300px;
+}
+
+.nav li{
+    display: inline;
+    margin:0 0 0 60px;
+}
+
+.nav {
+    display: flex; /* Use flexbox */
+    flex-direction: row; /* Display buttons horizontally */
+    justify-content: space-between; /* Distribute buttons evenly */
+    padding: 10px 20px; /* Add some padding for better spacing */
+}
+.nav {
+    list-style-type: none; /* Remove bullet points */
+}
+
+.nav button{
+
+    border:none;
+    outline:none;
+    border-radius: 5px;
+    padding:5px 20px;
+    font-size: 13px;
+    color:black;
+    background-image: linear-gradient(90deg,#00b1f7,#0088e1);
+    box-shadow: 1px 2px #000;
+    cursor:pointer;
+}
+.nav button:hover{
+    background-image: linear-gradient(90deg ,#0088e1,#00b1f7);
+}
+ #heading{
+    color: darkblue;
+ }
+
+input[type="text"]{
+    margin-top: 8px;
+    height: 3rem;
+    width: 240px;
+    border-radius: 8px;
+    border:2px solid #E7E7E9;
+    outline: none;
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+input:focus{
+    background-color: midnightblue;
+    color: powderblue; 
+    border-color: aliceblue;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgb(0, 123, 255, 255);
+}
+
+input[type="button"]{
+    background-color: black;
+    height: 3.2rem;
+    width: 200px;
+    color: whitesmoke;
+    font-size: 1.1rem;
+    outline: none;
+    border-radius: 8px;
+    box-shadow:1px 2px #000;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+}
+input[type="button"]:hover{
+    background-image: linear-gradient(180deg ,grey,darkgrey);
+}
+.result{
+    color: black;
