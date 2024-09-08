@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nearby Locations</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden; /* Prevent horizontal scroll */
+        background-color: white; /* Beach Sand Background Color */
+        color: #333; /* Dark Text Color */
+      }
+
+      /* Container for the buttons */
+      .button-container {
+        display: flex;
+        flex-direction: column; /* Stack buttons vertically */
+        justify-content: center; /* Center the buttons */
+        align-items: center;
+        padding: 10px;
+        background-color: transparent; /* Remove background color */
+        position: fixed;
+        bottom: 10px; /* Adjusted for spacing from the bottom */
+        right: 10px; /* Adjusted for spacing from the right */
+        z-index: 1001;
+        gap: 10px; /* Space between buttons */
+      }
+
+      .button {
+        padding: 10px 20px;
+        background-color: #6a0d91; /* Sea Blue Button Color */
+        color: white; /* Dark Text Color */
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+        border-radius: 12px; /* Curved corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Shadow effect */
+        transition: background-color 0.3s, transform 0.2s; /* Smooth transition */
+      }
+
+      .button:hover {
+        background-color: #b0e0e6; /* Light Sea Blue Accent Color */
+        transform: scale(1.05); /* Slightly scales up the button on hover */
+      }
+
+      #map {
+        height: 550px;
+        width: 100%;
+        margin-top: 10px; /* Adjusted for spacing above the map */
+        display: none;
+        transition: margin-left 0.5s; /* Smooth transition */
+      }
+
+      #sidebar {
+        height: 100%;
+        width: 200px; /* Reduced width */
+        position: fixed;
+        top: 0;
+        left: -200px; /* Hide the sidebar off-screen initially */
+        background-color: #6a0d91; /* Royal Purple Primary Color */
+        color: white;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        z-index: 1000;
+      }
+
+      #sidebar a {
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: white;
+        display: block;
+        transition: 0.3s;
+      }
+
+      #sidebar a:hover {
+        background-color: #b0e0e6; /* Light Sea Blue Accent Color */
+      }
+
+      #sidebar .closebtn {
+        position: absolute;
+        top: 0;
+        right: 15px; /* Adjusted for new width */
+        font-size: 36px;
+        cursor: pointer;
+      }
+
+      /* Beach Select Container */
+      #beachSelectContainer {
+        position: fixed;
+        top: 30px; /* Adjusted for button container */
+        left: 40px;
+        z-index: 1002;
+        background-color: none;
+        padding: 1px;
+        border-radius: 20px;
+      }
+
+      #beachSelect {
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 20px;
+        margin-bottom: 50px;
+        border: 3px #6a0d91 solid;
+        margin-left: 40px;
+      }
+
+      /* Sidebar toggle button at bottom left */
+      #openSidebarBtn {
+        position: fixed;
+        bottom: 10px; /* Adjusted for spacing from the bottom */
+        left: 10px; /* Adjusted for spacing from the left */
+        background-color: #6a0d91; /* Royal Purple Primary Color */
+        color: #fff;
+        border: none;
+        padding: 10px;
+        font-size: 24px;
+        border-radius: 50%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional: Shadow effect */
+        cursor: pointer;
+        z-index: 1001;
+        width: 50px;
+      }
+
+      /* Media query for smaller screens (mobile) */
+      @media (max-width: 650px) {
+        .button-container {
+          flex-direction: column; /* Stack buttons vertically */
+          padding: 0;
+          bottom: 10px; /* Adjusted for mobile view */
+          right: 10px; /* Adjusted for mobile view */
+        }
+        .header {
+          background-color: #6a0d91;
+          display: flex;
+          color: white;
+        }
+        .home-icon {
+          font-size: 40px;
+          margin-top: 13px;
+          margin-left: 10px;
+        }
+
+        .button {
+          padding: 8px;
+          font-size: 14px;
+        }
+        h1 {
+          margin-left: 0px;
+        }
+        img {
+          margin-left: 28px;
+          margin-top: 7px;
+        }
+
+        #map {
+          margin-top: 50px; /* Adjust map position for mobile view */
+        }
+
+        #beachSelectContainer {
+          top: 120px; /* Adjust for mobile view */
+          left: 10px;
+        }
+
+        #openSidebarBtn {
+          font-size: 22px; /* Adjust font size for mobile view */
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <a href="home.html"
+        ><i class="bx bx-home-heart home-icon" style="color: white"></i
+      ></a>
+      <img src="logo.jpg" width="60px" height="60px" />
+      <h1>SHELLS</h1>
+    </div>
+    <!-- Beach Search -->
+    <div id="beachSelectContainer">
+      <select id="beachSelect">
+        <option value="">-- Select a Beach --</option>
+      </select>
+    </div>
+
+    <div id="map"></div>
+
+    <div class="button-container">
+      <button id="searchBeachBtn" class="button">Find Beach</button>
+      <button id="myLocationBtn" class="button">My Locations</button>
+    </div>
+
+    <button id="openSidebarBtn">☰</button>
+
+    <div id="sidebar">
+      <a href="javascript:void(0)" class="closebtn">&times;</a>
+      <a href="#" id="findHospitalsBtn">Find Nearby Hospitals</a>
+      <hr />
+      <a href="#" id="findHotelsRestaurantsBtn"
+        >Find Nearby Hotels & Restaurants</a
+      >
+      <hr />
+      <a href="#" id="findTouristPlacesBtn">Find Nearby Tourist Places</a>
+      <hr />
+      <a href="#" id="findPetrolPumpsBtn">Find Petrol Pumps</a>
+      <hr />
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="rest.js"></script>
+
+    <script>
+      // JavaScript for opening and closing the sidebar
+      document
+        .getElementById("openSidebarBtn")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").style.left = "0";
+          document.getElementById("map").style.marginLeft = "200px";
+        });
+
+      document
+        .querySelector(".closebtn")
+        .addEventListener("click", function () {
+          document.getElementById("sidebar").style.left = "-200px";
+          document.getElementById("map").style.marginLeft = "0";
+        });
+    </script>
+  </body>
+</html>

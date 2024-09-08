@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beach Species Finder</title>
+    <link rel="stylesheet" href="fish.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <a href="home.html" class="home-icon">
+        <i class="bx bx-home"></i>
+      </a>
+      <img src="logo.jpg" width="50px" />
+      <h1 id="shells">SHELLS</h1>
+    </header>
+
+    <main>
+      <h2>Beach Species Finder</h2>
+      <div class="search-container">
+        <input
+          type="text"
+          id="searchBar"
+          placeholder="Enter Beach Name"
+        /><br />
+        <button onclick="searchBeach()">Search</button>
+      </div>
+      <div id="result"></div>
+    </main>
+    <script src="fish.js"></script>
+  </body>
+</html>

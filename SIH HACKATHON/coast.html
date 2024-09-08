@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coastal Guard Contact Finder</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+      }
+      .header {
+        background-color: #6a0d91;
+        padding: 15px;
+        text-align: center;
+        position: relative;
+        color: white;
+        display: flex;
+      }
+      .header h1 {
+        margin: 0;
+        font-size: 30px;
+        margin-left: 4px;
+        margin-top: 13px;
+      }
+      .header .home-icon {
+        position: absolute;
+        left: 15px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 28px;
+        color: white;
+        cursor: pointer;
+      }
+      h2 {
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
+      .header .home-icon:hover {
+        opacity: 0.8;
+      }
+      .container {
+        margin-top: 40px;
+        background-color: #6a0d91;
+        padding: 20px;
+        border-radius: 15px;
+        width: 70%;
+        max-width: 400px;
+        margin: 30px auto;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        color: white;
+      }
+      h2 {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: 22px;
+      }
+      input[type="text"] {
+        padding: 12px;
+        width: calc(100% - 24px);
+        border-radius: 20px;
+        border: 2px solid white;
+        background-color: white;
+        color: #000;
+        margin-bottom: 20px;
+        font-size: 16px;
+        outline: none;
+      }
+      button {
+        padding: 12px 10px;
+        border: none;
+        border-radius: 20px;
+        background-color: white;
+        color: #6a0d91;
+        font-size: 18px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: block;
+        width: 40%;
+        margin-top: 10px;
+        margin-left: 70px;
+      }
+      button:hover {
+        background-color: white;
+      }
+      img {
+        margin-left: 70px;
+      }
+      .result {
+        margin-top: 20px;
+        font-size: 1.5em;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <i class="bx bx-home-heart home-icon" onclick="goToHome()"></i>
+      <img src="logo.jpg" width="60px" />
+      <h1>SHELLS</h1>
+    </div>
+    <div class="container" data-aos="fade-up">
+      <h2>Coastal Guard Contact</h2>
+      <input type="text" id="beachInput" placeholder="Enter beach name..." />
+      <button onclick="findContact()">Search</button>
+      <button
+        id="callButton"
+        style="display: none; background-color: rgb(11, 201, 11)"
+        onclick="makeCall()"
+      >
+        Call
+      </button>
+      <div class="result" id="result"></div>
+    </div>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+      AOS.init();
+
+      const contacts = {
+        "Marina Beach": "+91 123 456 7890",
+        "Juhu Beach": "+91 234 567 8901",
+        "Palolem Beach": "+91 345 678 9012",
+        "Baga Beach": "+91 456 789 0123",
+        "Calangute Beach": "+91 567 890 1234",
+        "Varkala Beach": "+91 678 901 2345",
+        "Kovalam Beach": "+91 789 012 3456",
+        "Anjuna Beach": "+91 890 123 4567",
+        "Gokarna Beach": "+91 901 234 5678",
+        "Radhanagar Beach": "+91 012 345 6789",
+        "Elephanta Beach": "+91 123 456 7891",
+        "Mandarmani Beach": "+91 234 567 8902",
+        "Puri Beach": "+91 345 678 9013",
+        "Chandipur Beach": "+91 456 789 0124",
+        "Auroville Beach": "+91 567 890 1235",
+        "Dhanushkodi Beach": "+91 678 901 2346",
+        "Ramakrishna Beach": "+91 789 012 3457",
+        "Yarada Beach": "+91 890 123 4568",
+        "Kapu Beach": "+91 901 234 5679",
+        "Bekal Beach": "+91 012 345 6780",
+        "Murud Beach": "+91 123 456 7892",
+        "Ganpatipule Beach": "+91 234 567 8903",
+        "Velankanni Beach": "+91 345 678 9014",
+        "Tarkarli Beach": "+91 456 789 0125",
+        "Alibaug Beach": "+91 567 890 1236",
+        "Kashid Beach": "+91 678 901 2347",
+        "Majorda Beach": "+91 789 012 3458",
+        "Agonda Beach": "+91 890 123 4569",
+        "Arambol Beach": "+91 901 234 5680",
+        "Om Beach": "+91 012 345 6781",
+        "Muzhappilangad Drive-in Beach": "+91 123 456 7893",
+        "Tannirbhavi Beach": "+91 234 567 8904",
+        "Malpe Beach": "+91 345 678 9015",
+        "Vypin Island Beach": "+91 456 789 0126",
+        "Beypore Beach": "+91 567 890 1237",
+        "Marari Beach": "+91 678 901 2348",
+        "Cherai Beach": "+91 789 012 3459",
+        "Colva Beach": "+91 890 123 5670",
+        "Miramar Beach": "+91 901 234 5681",
+        "Chapora Beach": "+91 012 345 6782",
+        "Mandrem Beach": "+91 123 456 7894",
+        "Bogmalo Beach": "+91 234 567 8905",
+        "Cavelossim Beach": "+91 345 678 9016",
+        "Kumarakom Beach": "+91 456 789 0127",
+        "Kanyakumari Beach": "+91 567 890 1238",
+        "Diu Beach": "+91 678 901 2349",
+        "Somnath Beach": "+91 789 012 3460",
+        "Khodiyar Beach": "+91 890 123 5671",
+        "Shankarpur Beach": "+91 901 234 5682",
+        "Bakkhali Beach": "+91 012 345 6783",
+        "Chowpatty Beach": "+91 123 456 7895",
+        "Digha Beach": "+91 234 567 8906",
+        "Paradise Beach": "+91 345 678 9017",
+        "Vypin Beach": "+91 456 789 0128",
+        "Rishikonda Beach": "+91 567 890 1239",
+        "Bangaram Island Beach": "+91 678 901 2350",
+        "Kundapura Beach": "+91 789 012 3461",
+        "Alleppey Beach": "+91 890 123 5672",
+        "Rushikonda Beach": "+91 901 234 5683",
+        "Devka Beach": "+91 012 345 6784",
+        "Gopalpur Beach": "+91 123 456 7896",
+        "Mandvi Beach": "+91 234 567 8907",
+        "Velsao Beach": "+91 345 678 9018",
+        "Butterfly Beach": "+91 456 789 0129",
+        "Betalbatim Beach": "+91 567 890 1240",
+        "Karwar Beach": "+91 678 901 2351",
+        "Tranquebar Beach": "+91 789 012 3462",
+        "Silver Beach": "+91 890 123 5673",
+        "Dumas Beach": "+91 901 234 5684",
+        "Light House Beach": "+91 012 345 6785",
+        "Half Moon Beach": "+91 123 456 7897",
+        "Neeleshwar Beach": "+91 234 567 8908",
+        "Chavakkad Beach": "+91 345 678 9019",
+        "Kanwatheertha Beach": "+91 456 789 0130",
+        "Payyambalam Beach": "+91 567 890 1241",
+        "Muthalapozhi Beach": "+91 678 901 2352",
+        "Ottinene Beach": "+91 789 012 3463",
+        "Kodi Beach": "+91 890 123 5674",
+        "Someshwara Beach": "+91 901 234 5685",
+        "Mahe Beach": "+91 012 345 6786",
+        "Papanasam Beach": "+91 123 456 7898",
+        "Ramakrishna Beach": "+91 234 567 8909",
+        "Balighai Beach": "+91 345 678 9020",
+        "Baliharachandi Beach": "+91 456 789 0131",
+        "Konark Beach": "+91 567 890 1242",
+        "Palshet Beach": "+91 678 901 2353",
+        "Shiroda Beach": "+91 789 012 3464",
+
+        // Add more beaches here
+      };
+
+      function findContact() {
+        const beachName = document.getElementById("beachInput").value;
+        const resultDiv = document.getElementById("result");
+        const callButton = document.getElementById("callButton");
+        const contact = contacts[beachName];
+        if (contact) {
+          resultDiv.textContent = ` ${contact}`;
+          callButton.style.display = "block";
+          callButton.setAttribute("data-contact", contact); // Store contact number in data attribute
+        } else {
+          resultDiv.textContent = "Beach not found. Please try again.";
+          callButton.style.display = "none";
+        }
+      }
+
+      function makeCall() {
+        const callButton = document.getElementById("callButton");
+        const contact = callButton.getAttribute("data-contact");
+        if (contact) {
+          window.location.href = `tel:${contact}`;
+        }
+      }
+
+      function goToHome() {
+        window.location.href = "home.html";
+      }
+    </script>
+  </body>
+</html>

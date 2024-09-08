@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beach Weather</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="weather.css" />
+  </head>
+  <body>
+    <header>
+      <a href="home.html" id="home-icon"><i class="bx bx-home"></i></a>
+      <img src="logo.jpg" width="50px" />
+      <h1 id="shells">SHELLS</h1>
+    </header>
+
+    <main>
+      <section class="search-container">
+        <input type="text" id="search-bar" placeholder="Enter beach name..." />
+        <button id="search-button">Search</button>
+        <button id="reset-button">Reset</button>
+      </section>
+
+      <div id="beaches-container">
+        <!-- Weather data for each beach will be displayed here -->
+      </div>
+    </main>
+
+    <script src="weather.js"></script>
+  </body>
+</html>
