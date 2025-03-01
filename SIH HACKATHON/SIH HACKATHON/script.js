@@ -1,5 +1,4 @@
-var map = L.map("map").setView([10.7905, 78.7047], 9); // Start at Tiruchirappalli
-
+var map = L.map("map").setView([20, 0], 2); // Start at the center of the world with a zoom level of 2
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
   attribution: "© OpenStreetMap contributors",
 }).addTo(map);
@@ -184,43 +183,24 @@ var beaches = [
   { name: "Pantnam Beach", lat: 10.0145, lng: 76.2356, country: "India" },
 ];
 
+// Add markers for each beach
 var markers = {};
 beaches.forEach(function (beach) {
   var marker = L.marker([beach.lat, beach.lng]).bindPopup(beach.name);
-  markers[beach.name.toLowerCase()] = marker;
+
+  markers[beach.name.toLowerCase()] = marker; // Store marker, but don't add to map yet
 });
 
-var userLocation = { lat: 10.7905, lon: 78.7047 }; // Default user location (Tiruchirappalli)
+// Variable to store the user's current location
+var userLocation = null;
 var userLocationMarker = null;
+
+// Global variable to store all the drawn blue traces
 var drawnTraces = [];
 
-// Function to update user location marker on the map
-function updateUserLocation(location) {
-  if (userLocationMarker) {
-    map.removeLayer(userLocationMarker);
-  }
-
-  const redIcon = L.icon({
-    iconUrl: "red.png", // Path to red icon
-    iconSize: [35, 45],
-    iconAnchor: [20, 41],
-    popupAnchor: [1, -34],
-  });
-
-  userLocationMarker = L.marker([location.lat, location.lon], { icon: redIcon })
-    .addTo(map)
-    .bindPopup("User Location: Pulivalam")
-    .openPopup();
-
-  map.setView([location.lat, location.lon], 9);
-}
-
-// Set the default user location as Tiruchirappalli
-updateUserLocation(userLocation);
-
-// Haversine formula to calculate distance
+// Function to calculate distance using Haversine formula
 function calculateDistance(lat1, lon1, lat2, lon2) {
-  var R = 6371;
+  var R = 6371; // Radius of the Earth in km
   var dLat = (lat2 - lat1) * (Math.PI / 180);
   var dLon = (lon2 - lon1) * (Math.PI / 180);
   var a =
@@ -230,71 +210,149 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
       Math.sin(dLon / 2) *
       Math.sin(dLon / 2);
   var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return (R * c).toFixed(2);
+  var distance = R * c; // Distance in km
+  return distance.toFixed(2);
 }
 
-// Search functionality
+// Function to get the user's current location and mark it
+function getUserLocation() {
+  if (userLocation) {
+    // If location is already available, skip the request
+    updateUserLocation(userLocation);
+    return;
+  }
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      var userLat = position.coords.latitude;
+      var userLon = position.coords.longitude;
+
+      // Store the location
+      userLocation = { lat: userLat, lon: userLon };
+
+      // Update the map with the user's location
+      updateUserLocation(userLocation);
+    });
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+// Function to update the map with the user's location
+function updateUserLocation(location) {
+  if (userLocationMarker) {
+    map.removeLayer(userLocationMarker); // Remove previous marker if exists
+  }
+
+  const redIcon = L.icon({
+    iconUrl: "red.png", // Provide the path to your red icon image
+    iconSize: [35, 45], // Size of the icon
+    iconAnchor: [20, 41], // Point of the icon which will correspond to marker's location
+    popupAnchor: [1, -34], // Point from which the popup should open relative to the iconAnchor
+    shadowUrl: "path/to/marker-shadow.png", // Optional: provide the path to the marker shadow image
+    shadowSize: [41, 41], // Optional: size of the shadow image
+  });
+
+  userLocationMarker = L.marker([location.lat, location.lon], { icon: redIcon }) // Use the custom red icon
+    .addTo(map)
+    .bindPopup("You are here")
+    .openPopup();
+
+  map.setView([location.lat, location.lon], 12); // Center the map on the user's location
+}
+
+// Call getUserLocation to initially get the user's current location (run this once)
+getUserLocation();
+
+// Variable to hold the full name of the selected beach
+var selectedBeach = null;
+
+// Add event listener for search functionality
 document.getElementById("search-input").addEventListener("input", function (e) {
   var searchTerm = e.target.value.toLowerCase().trim();
   let found = false;
 
+  // Check if the input matches a beach name
   Object.keys(markers).forEach(function (beachName) {
+    var marker = markers[beachName];
+
     if (beachName.includes(searchTerm) && searchTerm !== "") {
       found = true;
-      selectedBeach = beachName;
+      selectedBeach = beachName; // Store the full name of the selected beach
     }
   });
 
-  document.getElementById("go-button").disabled = !found;
-});
-
-// "Go" button click event
-document.getElementById("go-button").addEventListener("click", function () {
-  if (selectedBeach && markers[selectedBeach]) {
-    var selectedMarker = markers[selectedBeach];
-    map.setView(selectedMarker.getLatLng(), 9);
-    selectedMarker.openPopup();
-    getDistanceToBeach(selectedMarker, selectedBeach);
+  // Enable "Go" button only when a full beach name is typed
+  if (found && selectedBeach) {
+    document.getElementById("go-button").disabled = false;
+  } else {
+    document.getElementById("go-button").disabled = true;
   }
 });
 
-// Function to show distance from Tiruchirappalli to the selected beach
+// Function to handle the "Go" button click
+document.getElementById("go-button").addEventListener("click", function () {
+  if (selectedBeach && markers[selectedBeach]) {
+    var selectedMarker = markers[selectedBeach];
+    map.setView(selectedMarker.getLatLng(), 9); // Zoom into the selected beach
+    selectedMarker.openPopup(); // Open the popup for the selected beach
+    getDistanceToBeach(selectedMarker, selectedBeach); // Show distance and traces
+  }
+});
+
+// Function to get distance between the current location and selected beach
 function getDistanceToBeach(beachMarker, beachName) {
-  clearTraces();
+  if (userLocation) {
+    // Clear previous traces (blue lines)
+    clearTraces();
 
-  var distance = calculateDistance(
-    userLocation.lat,
-    userLocation.lon,
-    beachMarker.getLatLng().lat,
-    beachMarker.getLatLng().lng
-  );
+    var distance = calculateDistance(
+      userLocation.lat,
+      userLocation.lon,
+      beachMarker.getLatLng().lat,
+      beachMarker.getLatLng().lng
+    );
 
-  var userLocationLatLng = L.latLng(userLocation.lat, userLocation.lon);
-  var beachLocation = beachMarker.getLatLng();
-  var blueTrace = L.polyline([userLocationLatLng, beachLocation], {
-    color: "blue",
-  }).addTo(map);
-  drawnTraces.push(blueTrace);
+    // Add trace (blue line) between user location and selected beach
+    var userLocationLatLng = L.latLng(userLocation.lat, userLocation.lon);
+    var beachLocation = beachMarker.getLatLng();
+    var blueTrace = L.polyline([userLocationLatLng, beachLocation], {
+      color: "blue",
+    }).addTo(map);
+    drawnTraces.push(blueTrace); // Store the blue trace
 
-  var popUpContent = `<div class="distance-popup">
+    // Create the pop-up for distance info
+    var popUpContent = `
+      <div class="distance-popup">
         <p>Distance to ${beachName}: ${distance} km</p>
-      </div>`;
-
-  L.popup()
-    .setLatLng(beachMarker.getLatLng())
-    .setContent(popUpContent)
-    .openOn(map);
+      </div>
+    `;
+    L.popup()
+      .setLatLng(beachMarker.getLatLng())
+      .setContent(popUpContent)
+      .openOn(map);
+  } else {
+    alert("User location is not available.");
+  }
 }
 
-// Function to clear blue traces
+// Function to clear all blue traces on the map
 function clearTraces() {
+  // Loop through each trace and remove it
   drawnTraces.forEach(function (trace) {
     map.removeLayer(trace);
   });
+  // Clear the array of drawn traces
   drawnTraces = [];
 }
 
-// Redirect to home page
+// Function to close the distance pop-up
+function closePopup() {
+  var popup = document.querySelector(".leaflet-popup");
+  if (popup) {
+    popup.style.display = "none";
+  }
+}
 function goToHome() {
-  window.location.href = "home.html";
+  window.location.href = "home.html"; // Redirect to home page
 }

@@ -3,50 +3,52 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Coastal Guard Contact Finder</title>
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
-    />
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <title>Surf More</title>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
       body {
-        background: #661e84;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: url("bk.jpg") no-repeat center center/cover;
       }
-      img {
-        margin-left: 50px;
-      }
-      h1 {
-        margin-top: 180px;
-        margin-left: 110px;
-        color: white;
-        font-family: Verdana, Geneva, Tahoma, sans-serif;
-      }
-      .btn {
-        display: inline-block;
-        padding: 13px 2px;
-        margin: 4px;
-        background-color: white;
-        color: #661e84;
-        text-decoration: none;
-        font-size: 1.1rem;
-        font-family: "Verdana", sans-serif;
-        font-weight: bold;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      .container {
         text-align: center;
-        width: 200px;
-        margin-left: 70px;
-        text-decoration: none;
-        margin-bottom: 30px;
+      }
+      .logo {
+        width: 120px;
+        height: auto;
+        margin-left: 20px;
+      }
+      .button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        color: rgb(16, 11, 11);
+        background: rgba(244, 239, 239, 0.856);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .button:hover {
+        background: rgba(255, 255, 255, 0.3);
       }
     </style>
   </head>
-
   <body>
-    <h1>SHELLS</h1>
-    <img src="logo.jpg" width="250px" />
-    <a href="location.html" class="btn">Surf More</a>
+    <div class="container">
+      <img src="sea-waves2.png" alt="Sea Waves Logo" class="logo" /><br />
+      <button class="button" onclick="window.location.href='home.html'">
+        Surf More
+      </button>
+    </div>
   </body>
 </html>
