@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Contact | Dr. Vijay Harikrishnan</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome and BoxIcons for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #16325b;
+        --accent-color: #ffc107;
+        --bg-color: #ffffff;
+        --font-family: "Roboto", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: var(--font-family);
+      }
+
+      body {
+        background: var(--bg-color);
+        color: var(--primary-color);
+      }
+
+      header {
+        background: var(--primary-color);
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        font-size: 24px;
+        color: var(--bg-color);
+        font-weight: 700;
+      }
+
+      nav a {
+        color: var(--bg-color);
+        font-weight: bold;
+        font-size: 18px;
+        margin-left: 40px;
+        text-decoration: none;
+        position: relative;
+        padding: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      /* Underline on hover */
+      nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 2px;
+        background: var(--accent-color);
+        transition: 0.4s ease;
+      }
+
+      nav a:hover::after,
+      nav a:focus::after {
+        width: 100%;
+      }
+      nav a.active::after {
+        width: 100%;
+      }
+
+      /* Contact Section */
+      .contact {
+        padding: 60px 20px;
+        text-align: center;
+      }
+
+      .contact h2 {
+        font-size: 32px;
+        color: var(--primary-color);
+        margin-bottom: 40px;
+      }
+
+      .contact p {
+        font-size: 18px;
+        color: #030303;
+        margin-bottom: 30px;
+      }
+
+      .contact-form {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #f8f9fa;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 14px 10px rgba(0, 0, 0, 0.1);
+        border: #16325b solid 1px;
+      }
+
+      .contact-form input,
+      .contact-form textarea {
+        width: 100%;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #9e9b9b;
+        font-size: 16px;
+        color: #333;
+      }
+
+      .contact-form textarea {
+        height: 150px;
+      }
+
+      .contact-form button {
+        background-color: var(--primary-color);
+        color: var(--bg-color);
+        padding: 15px 30px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .contact-form button:hover {
+        background-color: var(--accent-color);
+      }
+      @media (max-width: 768px) {
+        header {
+          padding: 20px 10px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .logo {
+          font-size: 20px;
+          margin-bottom: 20px;
+        }
+
+        nav a {
+          margin-left: 20px;
+          font-size: 16px;
+        }
+      }
+      @media (max-width: 480px) {
+        header {
+          padding: 15px 10px;
+        }
+
+        .logo {
+          font-size: 18px;
+        }
+
+        nav a {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Header Section - Same as services page -->
+    <header>
+      <div class="logo">Dr. Vijay Harikrishnan</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html" class="active">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Contact Section -->
+    <section class="contact">
+      <h2>Contact Us</h2>
+      <p>
+        If you have any questions or would like to schedule an appointment,
+        please feel free to contact us using the form below.
+      </p>
+
+      <!-- Contact Form -->
+      <div class="contact-form">
+        <form onsubmit="sendEmail(); return false;">
+          <input
+            type="text"
+            id="name"
+            placeholder="Your Name"
+            required
+          /><br /><br />
+          <input
+            type="email"
+            id="email"
+            placeholder="Your Email"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            id="phone"
+            placeholder="Your Phone Number"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            id="date"
+            placeholder="Enter Date"
+            required
+          /><br /><br />
+          <textarea id="message" placeholder="Your Message" required></textarea
+          ><br /><br />
+          <button type="submit">Send Message</button>
+        </form>
+      </div>
+    </section>
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault(); // Stop the form from submitting normally
+
+          var name = document.getElementById("name").value.trim();
+          var email = document.getElementById("email").value.trim();
+          var phone = document.getElementById("phone").value.trim();
+          var date = document.getElementById("date").value.trim();
+          var message = document.getElementById("message").value.trim();
+
+          // Properly building the body
+          var body =
+            "Name: " +
+            name +
+            "%0D%0A" +
+            "Email: " +
+            email +
+            "%0D%0A" +
+            "Phone: " +
+            phone +
+            "%0D%0A" +
+            "Date: " +
+            date +
+            "%0D%0A%0D%0A" +
+            "Message:%0D%0A" +
+            message;
+
+          var mailtoLink =
+            "mailto:vjey79@gmail.com" + // <-- Change this to doctor's email
+            "?subject=New Contact Message from Website" +
+            "&body=" +
+            body;
+
+          window.location.href = mailtoLink;
+        });
+    </script>
+  </body>
+</html>

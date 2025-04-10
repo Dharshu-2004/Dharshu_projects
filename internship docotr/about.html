@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Dr. Vijay Harikrishnan</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- FontAwesome and BoxIcons for Icons -->
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/boxicons@2.0.7/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #16325b;
+        --accent-color: #ffc107;
+        --bg-color: #ffffff;
+        --font-family: "Roboto", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: var(--font-family);
+      }
+
+      body {
+        background: var(--bg-color);
+        color: var(--primary-color);
+      }
+
+      header {
+        background: var(--primary-color);
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        font-size: 24px;
+        color: var(--bg-color);
+        font-weight: 700;
+      }
+
+      nav a {
+        color: var(--bg-color);
+        font-weight: bold;
+        font-size: 18px;
+        margin-left: 40px;
+        text-decoration: none;
+        position: relative;
+        padding: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      /* Underline on hover */
+      nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 2px;
+        background: var(--accent-color);
+        transition: 0.4s ease;
+      }
+
+      nav a:hover::after,
+      nav a:focus::after {
+        width: 100%;
+      }
+      nav a.active::after {
+        width: 100%;
+      }
+
+      /* About Section */
+      .about-section {
+        padding: 60px 20px;
+        background-color: #f8f9fa;
+        text-align: center;
+      }
+
+      .about-section h2 {
+        font-size: 32px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+      }
+
+      .about-section p {
+        font-size: 18px;
+        margin-bottom: 40px;
+        font-weight: 550;
+      }
+
+      .about-section img {
+        width: 200px;
+        height: 250px;
+        border-radius: 50%;
+        margin-bottom: 20px;
+        border: #16325b 2px solid;
+      }
+
+      .about-section .details {
+        font-size: 16px;
+        margin-bottom: 40px;
+        color: #555;
+      }
+
+      .timeline {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px 0;
+        opacity: 0;
+        animation: fadeIn 2s forwards;
+      }
+
+      .timeline-item {
+        position: relative;
+        padding-left: 40px;
+        margin-bottom: 30px;
+        display: flex;
+        align-items: center;
+        opacity: 0;
+        transform: translateX(-50px);
+        animation: slideIn 0.7s forwards;
+        animation-delay: 0.5s;
+      }
+
+      .timeline-item:nth-child(odd) {
+        animation-delay: 0.7s;
+      }
+
+      .timeline-item .timeline-icon {
+        position: absolute;
+        margin-left: 30px;
+        margin-top: 27px;
+        left: 0;
+        width: 80px;
+        height: 80px;
+        background-color: var(--primary-color);
+        color: white;
+        border-radius: 50%;
+        font-size: 30px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .timeline-item .timeline-content {
+        padding: 15px;
+        background-color: #fff;
+        border-radius: 70px;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        position: relative;
+        border: 1px #16325b solid;
+      }
+
+      .timeline-item .timeline-content p {
+        font-size: 16px;
+        color: #010101;
+      }
+
+      .timeline-item .timeline-content h4 {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 10px;
+        color: var(--primary-color);
+        margin-top: 26px;
+      }
+
+      .timeline-item .timeline-content .date {
+        font-size: 20px;
+        font-weight: 600;
+        color: blue;
+        margin-bottom: 50px;
+      }
+
+      /* Responsive */
+
+      @media (max-width: 768px) {
+        header {
+          padding: 20px 10px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .logo {
+          font-size: 20px;
+          margin-bottom: 20px;
+        }
+
+        nav a {
+          margin-left: 20px;
+          font-size: 16px;
+        }
+
+        .about-section img {
+          width: 150px;
+          height: 180px;
+        }
+
+        .about-section h2 {
+          font-size: 28px;
+        }
+
+        .about-section p {
+          font-size: 16px;
+        }
+
+        .timeline-item .timeline-icon {
+          width: 60px;
+          height: 60px;
+          font-size: 25px;
+        }
+
+        .timeline-item .timeline-content h4 {
+          font-size: 18px;
+        }
+
+        .timeline-item .timeline-content p {
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        header {
+          padding: 15px 10px;
+        }
+
+        .logo {
+          font-size: 18px;
+        }
+
+        nav a {
+          margin-left: 10px;
+          font-size: 14px;
+        }
+
+        .about-section h2 {
+          font-size: 24px;
+        }
+
+        .about-section p {
+          font-size: 14px;
+        }
+        .timeline-item {
+          margin-right: 10px;
+        }
+        .timeline-item .timeline-icon {
+          width: 50px;
+          height: 50px;
+          font-size: 20px;
+        }
+
+        .timeline-item .timeline-content h4 {
+          font-size: 16px;
+        }
+
+        .timeline-item .timeline-content p {
+          font-size: 12px;
+        }
+      }
+
+      /* Animation */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+      /* Hide icons on mobile devices */
+      @media (max-width: 768px) {
+        .timeline-item .timeline-icon {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Dr. Vijay Harikrishnan</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html" class="active">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <!-- About Section -->
+    <section class="about-section">
+      <img src="dd.jpg" alt="Dr. Vijay Harikrishnan" />
+      <h2>About Dr. Vijay Harikrishnan</h2>
+      <p class="details">
+        Consultant Neonatologist and Paediatrician with 14+ years of experience.
+        He completed his MBBS from Rajamuthiah Medical College, Annamalai
+        University, and holds FRCPCH and MRCPCH from London. He also completed a
+        PG Diploma in Child Health from the UK. Dr. Harikrishnan's expertise
+        spans paediatric and neonatal care, specializing in emergency
+        resuscitation and intensive care management.
+      </p>
+
+      <!-- Timeline Section -->
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-icon">
+              <i class="bx bxs-graduation"></i>
+            </div>
+            <h4>MBBS</h4>
+            <p>
+              Completed MBBS from Rajamuthiah Medical College, Tamil Nadu,
+              India.
+            </p>
+            <span class="date">2008</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-icon">
+              <i class="fas fa-stethoscope"></i>
+            </div>
+            <h4>FRCPCH & MRCPCH</h4>
+            <p>Completed FRCPCH and MRCPCH from London, UK.</p>
+            <span class="date">2012</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-icon">
+              <i class="bx bxs-medal"></i>
+            </div>
+            <h4>PG Diploma in Child Health</h4>
+            <p>Completed a PG Diploma in Child Health from the UK.</p>
+            <span class="date">2014</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <h4>CCT Training & Tertiary Hospital Experience</h4>
+            <p>
+              Trained at the Yorkshire & Humber Deanery, with experience at top
+              children's hospitals.
+            </p>
+            <span class="date">2016</span>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <div class="timeline-icon">
+              <i class="fas fa-hospital"></i>
+            </div>
+            <h4>Consultant Neonatologist & Paediatrician</h4>
+            <p>
+              Currently working as a Consultant in Neonatology & Paediatrics.
+            </p>
+            <span class="date">2020 - Present</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>

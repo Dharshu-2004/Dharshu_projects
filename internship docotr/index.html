@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
+    <title>Dr. Vijay Harikrishnan</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --primary-color: #16325b;
+        --accent-color: #ffc107;
+        --bg-color: #ffffff;
+        --font-family: "Roboto", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: var(--font-family);
+      }
+
+      body {
+        background: var(--bg-color);
+        color: var(--primary-color);
+      }
+
+      header {
+        background: var(--primary-color);
+        padding: 20px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .logo {
+        font-size: 24px;
+        color: var(--bg-color);
+        font-weight: 700;
+      }
+
+      nav a {
+        color: var(--bg-color);
+        font-weight: bold;
+        font-size: 18px;
+        margin-left: 40px;
+        text-decoration: none;
+        position: relative;
+        padding: 5px 0;
+        transition: all 0.3s ease;
+      }
+
+      /* Underline on hover */
+      nav a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 0%;
+        height: 2px;
+        background: var(--accent-color);
+        transition: 0.4s ease;
+      }
+
+      nav a:hover::after,
+      nav a:focus::after {
+        width: 100%;
+      }
+
+      .hero {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        min-height: 90vh;
+        padding: 40px 20px;
+        text-align: center;
+        animation: fadeIn 1s ease forwards;
+      }
+
+      .hero img {
+        width: 300px;
+        height: auto;
+        border-radius: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 16px 16px rgba(0.1, 0.1, 0.1, 0.2);
+        transition: background 0.3s, transform 0.3s;
+      }
+      .hero img:hover {
+        transform: scale(1.1);
+      }
+
+      .hero-text {
+        max-width: 600px;
+        margin-left: 20px;
+      }
+
+      .hero-text h1 {
+        font-size: 28px;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        transition: background 0.3s, transform 0.3s;
+      }
+      .hero-text h1:hover {
+        transform: scale(1.1);
+      }
+
+      .hero-text p {
+        font-size: 18px;
+        margin-bottom: 20px;
+        font-weight: 550;
+      }
+
+      .hero-text a {
+        display: inline-block;
+        background: var(--accent-color);
+        color: var(--primary-color);
+        padding: 12px 25px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 30px;
+        border: 2px solid #16325b;
+        transition: background 0.3s, transform 0.3s, border-color 0.3s;
+      }
+
+      .hero-text a:hover {
+        background: #e6b400;
+        border-color: #16325b;
+        transform: scale(1.1);
+      }
+
+      /* Active page underline */
+      nav a.active::after {
+        width: 100%;
+      }
+
+      /* Responsive Navbar */
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          align-items: flex-start;
+          padding: 10px;
+        }
+
+        .logo {
+          font-size: 20px;
+          margin-bottom: 10px;
+        }
+
+        nav {
+          margin-top: 10px;
+          width: 100%;
+          text-align: center;
+        }
+
+        nav a {
+          margin-left: 0;
+          margin-right: 20px;
+          display: inline-block;
+        }
+
+        nav a:last-child {
+          margin-right: 0;
+        }
+
+        .hero {
+          flex-direction: column;
+          text-align: center;
+          padding: 40px 20px;
+        }
+
+        .hero img {
+          width: 80%;
+          max-width: 350px;
+        }
+
+        .hero-text {
+          margin-top: 20px;
+        }
+
+        .hero-text h1 {
+          font-size: 24px;
+        }
+
+        .hero-text p {
+          font-size: 16px;
+        }
+
+        .hero-text a {
+          padding: 10px 20px;
+          font-size: 14px;
+        }
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        0% {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">Dr. Vijay Harikrishnan</div>
+      <nav>
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="services.html">Services</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <img src="docotr.jpg" alt="Dr. Vijay Harikrishnan" />
+      <div class="hero-text">
+        <h1>Dr. Vijay Harikrishnan</h1>
+        <p>
+          Consultant Neonatologist and Paediatrician with over 14 years of
+          experience in paediatric and neonatal care, specializing in emergency
+          resuscitation and intensive care management.
+        </p>
+        <a href="about.html">Learn More</a>
+      </div>
+    </section>
+  </body>
+</html>
