@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coastal Guard Contact Finder</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #7ed9ef;
+        color: #072791;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+      }
+      .header {
+        background-color: #031b55;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+      }
+      .header img {
+        width: 50px;
+        border-radius: 50%;
+      }
+      .header h1 {
+        font-size: 24px;
+        margin: 0;
+        flex: 1;
+        text-align: center;
+      }
+      .slide {
+        margin: 20px auto;
+        padding: 85px;
+        font-family: Arial, Helvetica, sans-serif;
+        width: 50%;
+        height: 100px;
+        overflow-x: hidden;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        border-radius: 20px;
+      }
+      .slide1 {
+        background-image: url("sun.png");
+      }
+      .slide2 {
+        background-image: url("jelly.png");
+      }
+      .slide3 {
+        background-image: url("drown.png");
+      }
+      .slide4 {
+        background-image: url("coral.png");
+      }
+
+      .arrow {
+        cursor: pointer;
+        position: absolute;
+        top: 27%;
+        margin-top: -35px;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        z-index: 10;
+      }
+      #arrow-left {
+        border-width: 20px 30px 20px 0;
+        border-color: transparent #fff transparent transparent;
+        left: 0;
+        margin-left: 20px;
+      }
+      #arrow-right {
+        border-width: 20px 0 20px 30px;
+        border-color: transparent transparent transparent #fff;
+        right: 0;
+        margin-right: 20px;
+      }
+      .container {
+        margin: 30px auto;
+        background-color: white;
+        padding: 20px;
+        border-radius: 15px;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0 0 10px blue;
+        height: 330px;
+      }
+      input {
+        width: 90%;
+        padding: 12px;
+        border-radius: 10px;
+        border: 2px solid #072791;
+        background-color: white;
+        color: #072791;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+      .quick-options {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .quick-options button {
+        background-color: #072791;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background 0.3s;
+        margin-top: 10px;
+      }
+      .quick-options button:hover {
+        background-color: #031b55;
+      }
+      #result {
+        margin-top: 15px;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      #callButton {
+        display: none;
+      }
+      .navbar {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px 0;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar a {
+        text-align: center;
+        color: #888;
+        flex-grow: 1;
+        transition: color 0.3s ease;
+      }
+
+      .navbar a .icon {
+        background-color: white;
+        border: 2px solid #072791;
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 20px;
+        transition: all 0.3s ease;
+        color: #072791;
+        box-shadow: 0 1px 1px #072791;
+      }
+
+      .navbar a.active {
+        color: #072791;
+      }
+
+      .navbar a:hover .icon {
+        background-color: #072791;
+        color: white;
+        /* transform: translateY(-10px);*/
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>SHELLS</h1>
+      <img src="logo.jpg" alt="Profile" />
+    </div>
+
+    <div class="slider">
+      <div id="arrow-left" class="arrow"></div>
+      <div class="slide slide1"></div>
+      <div class="slide slide2"></div>
+      <div class="slide slide3"></div>
+      <div class="slide slide4"></div>
+      <div id="arrow-right" class="arrow"></div>
+    </div>
+
+    <div class="container">
+      <h2>Emergency Help Needed?</h2>
+      <p>Find the Coastal Guard</p>
+      <input type="text" id="beachInput" placeholder="Enter beach name..." />
+      <div class="quick-options">
+        <button onclick="findContact()">Find Contact</button>
+        <p id="result"></p>
+        <button id="callButton" onclick="makeCall()">Call Now</button>
+      </div>
+    </div>
+    <div class="navbar">
+      <a href="home.html" class="home">
+        <i class="fas fa-home icon"></i>
+      </a>
+      <a href="map.html" class="map">
+        <i class="fas fa-map-marker-alt icon"></i>
+      </a>
+      <a href="settings.html" class="settings">
+        <i class="fas fa-cog icon"></i>
+      </a>
+      <a href="boat.html" class="boats">
+        <i class="fa-solid fa-sailboat icon"></i>
+      </a>
+    </div>
+
+    <script>
+      let sliderImages = document.querySelectorAll(".slide"),
+        arrowLeft = document.querySelector("#arrow-left"),
+        arrowRight = document.querySelector("#arrow-right"),
+        current = 0;
+
+      function reset() {
+        for (let i = 0; i < sliderImages.length; i++) {
+          sliderImages[i].style.display = "none";
+        }
+      }
+
+      function startSlide() {
+        reset();
+        sliderImages[0].style.display = "block";
+      }
+
+      function slideLeft() {
+        reset();
+        if (current === 0) {
+          current = sliderImages.length;
+        }
+        sliderImages[current - 1].style.display = "block";
+        current--;
+      }
+
+      function slideRight() {
+        reset();
+        if (current === sliderImages.length - 1) {
+          current = -1;
+        }
+        sliderImages[current + 1].style.display = "block";
+        current++;
+      }
+
+      arrowLeft.addEventListener("click", function () {
+        slideLeft();
+      });
+
+      arrowRight.addEventListener("click", function () {
+        slideRight();
+      });
+
+      startSlide();
+    </script>
+
+    <script>
+      const contacts = {
+        "Marina Beach": "+91 77085 27803",
+        "Juhu Beach": "+91 234 567 8901",
+        "Palolem Beach": "+91 345 678 9012",
+        "Baga Beach": "+91 456 789 0123",
+        "Calangute Beach": "+91 567 890 1234",
+        "Varkala Beach": "+91 678 901 2345",
+        "Kovalam Beach": "+91 789 012 3456",
+        "Anjuna Beach": "+91 890 123 4567",
+        "Gokarna Beach": "+91 901 234 5678",
+        "Radhanagar Beach": "+91 012 345 6789",
+        "Elephanta Beach": "+91 123 456 7891",
+        "Mandarmani Beach": "+91 234 567 8902",
+        "Puri Beach": "+91 345 678 9013",
+        "Chandipur Beach": "+91 456 789 0124",
+        "Auroville Beach": "+91 567 890 1235",
+        "Dhanushkodi Beach": "+91 678 901 2346",
+        "Ramakrishna Beach": "+91 789 012 3457",
+        "Yarada Beach": "+91 890 123 4568",
+        "Kapu Beach": "+91 901 234 5679",
+        "Bekal Beach": "+91 012 345 6780",
+        "Murud Beach": "+91 123 456 7892",
+        "Ganpatipule Beach": "+91 234 567 8903",
+        "Velankanni Beach": "+91 345 678 9014",
+        "Tarkarli Beach": "+91 456 789 0125",
+        "Alibaug Beach": "+91 567 890 1236",
+        "Kashid Beach": "+91 678 901 2347",
+        "Majorda Beach": "+91 789 012 3458",
+        "Agonda Beach": "+91 890 123 4569",
+        "Arambol Beach": "+91 901 234 5680",
+        "Om Beach": "+91 012 345 6781",
+        "Muzhappilangad Drive-in Beach": "+91 123 456 7893",
+        "Tannirbhavi Beach": "+91 234 567 8904",
+        "Malpe Beach": "+91 345 678 9015",
+        "Vypin Island Beach": "+91 456 789 0126",
+        "Beypore Beach": "+91 567 890 1237",
+        "Marari Beach": "+91 678 901 2348",
+        "Cherai Beach": "+91 789 012 3459",
+        "Colva Beach": "+91 890 123 5670",
+        "Serenity Beach": "+91 890 123 5670",
+        "Miramar Beach": "+91 901 234 5681",
+        "Chapora Beach": "+91 012 345 6782",
+        "Mandrem Beach": "+91 123 456 7894",
+        "Bogmalo Beach": "+91 234 567 8905",
+        "Cavelossim Beach": "+91 345 678 9016",
+        "Kumarakom Beach": "+91 456 789 0127",
+        "Kanyakumari Beach": "+91 567 890 1238",
+        "Diu Beach": "+91 678 901 2349",
+        "Somnath Beach": "+91 789 012 3460",
+        "Khodiyar Beach": "+91 890 123 5671",
+        "Shankarpur Beach": "+91 901 234 5682",
+        "Bakkhali Beach": "+91 012 345 6783",
+        "Chowpatty Beach": "+91 123 456 7895",
+        "Digha Beach": "+91 234 567 8906",
+        "Paradise Beach": "+91 345 678 9017",
+        "Vypin Beach": "+91 456 789 0128",
+        "Rishikonda Beach": "+91 567 890 1239",
+        "Bangaram Island Beach": "+91 678 901 2350",
+        "Kundapura Beach": "+91 789 012 3461",
+        "Alleppey Beach": "+91 890 123 5672",
+        "Rushikonda Beach": "+91 901 234 5683",
+        "Devka Beach": "+91 012 345 6784",
+        "Gopalpur Beach": "+91 123 456 7896",
+        "Mandvi Beach": "+91 234 567 8907",
+        "Velsao Beach": "+91 345 678 9018",
+        "Butterfly Beach": "+91 456 789 0129",
+        "Betalbatim Beach": "+91 567 890 1240",
+        "Karwar Beach": "+91 678 901 2351",
+        "Tranquebar Beach": "+91 789 012 3462",
+        "Silver Beach": "+91 890 123 5673",
+        "Dumas Beach": "+91 901 234 5684",
+        "Light House Beach": "+91 012 345 6785",
+        "Half Moon Beach": "+91 123 456 7897",
+        "Neeleshwar Beach": "+91 234 567 8908",
+        "Chavakkad Beach": "+91 345 678 9019",
+        "Kanwatheertha Beach": "+91 456 789 0130",
+        "Payyambalam Beach": "+91 567 890 1241",
+        "Muthalapozhi Beach": "+91 678 901 2352",
+        "Ottinene Beach": "+91 789 012 3463",
+        "Kodi Beach": "+91 890 123 5674",
+        "Someshwara Beach": "+91 901 234 5685",
+        "Mahe Beach": "+91 012 345 6786",
+        "Papanasam Beach": "+91 123 456 7898",
+        "Ramakrishna Beach": "+91 234 567 8909",
+        "Balighai Beach": "+91 345 678 9020",
+        "Baliharachandi Beach": "+91 456 789 0131",
+        "Konark Beach": "+91 567 890 1242",
+        "Palshet Beach": "+91 678 901 2353",
+        "Shiroda Beach": "+91 789 012 3464",
+      };
+
+      function findContact() {
+        const beachInput = document
+          .getElementById("beachInput")
+          .value.trim()
+          .toLowerCase();
+        const resultDiv = document.getElementById("result");
+        const callButton = document.getElementById("callButton");
+
+        const contact = Object.keys(contacts).find(
+          (beach) => beach.toLowerCase() === beachInput
+        );
+
+        if (contact) {
+          resultDiv.textContent = contacts[contact];
+          callButton.style.display = "block";
+          callButton.setAttribute("data-contact", contacts[contact]);
+        } else {
+          resultDiv.textContent = "Beach not found. Please try again.";
+          callButton.style.display = "none";
+        }
+      }
+
+      function makeCall() {
+        const callButton = document.getElementById("callButton");
+        const contact = callButton.getAttribute("data-contact");
+        if (contact) {
+          window.location.href = `tel:${contact}`;
+        }
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Beach Info Map</title>
+
+    <!-- Leaflet CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      .header {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        background: #072791;
+        color: white;
+        height: 130px;
+        box-sizing: border-box;
+        position: relative;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        font-weight: 800;
+        font-size: 1.5rem;
+      }
+
+      .logo img {
+        width: 30px;
+        margin-right: 10px;
+      }
+
+      span {
+        font-size: 50px;
+      }
+
+      #map {
+        height: calc(90vh - 90px);
+        width: 100%;
+        margin-top: 30px;
+      }
+
+      /* 🔍 Search Container */
+      #search-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 16px 12px;
+        background: #f0f0f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        gap: 12px;
+      }
+
+      #beach-search {
+        width: 90%;
+        max-width: 500px;
+        padding: 18px 20px;
+        font-size: 20px;
+        border-radius: 30px;
+        border: 2px solid #072791;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        transition: all 0.3s ease;
+      }
+
+      #beach-search:focus {
+        outline: none;
+        border-color: #0044cc;
+        box-shadow: 0 4px 12px rgba(0, 68, 204, 0.3);
+      }
+
+      #search-container button {
+        padding: 14px 26px;
+        font-size: 18px;
+        background-color: #072791;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      }
+
+      #search-container button:hover {
+        background-color: #0044cc;
+        transform: scale(1.05);
+      }
+
+      /* ⬇️ Navbar Styles */
+      .navbar {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px 0;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 999;
+        height: 150px;
+      }
+
+      .navbar a {
+        text-align: center;
+        color: #888;
+        flex-grow: 1;
+        transition: color 0.3s ease;
+      }
+
+      .navbar a .icon {
+        background-color: white;
+        border: 2px solid #072791;
+        border-radius: 50%;
+        padding: 12px;
+        font-size: 46px;
+        transition: all 0.3s ease;
+        color: #072791;
+        box-shadow: 0 1px 1px #072791;
+      }
+
+      .navbar a:hover .icon {
+        background-color: #072791;
+        color: white;
+      }
+
+      /* 📱 Responsive Fixes */
+      @media (max-width: 768px) {
+        .navbar a .icon {
+          font-size: 28px;
+          padding: 14px;
+        }
+
+        .navbar {
+          padding: 15px 0;
+        }
+
+        #beach-search {
+          width: 95%;
+          font-size: 18px;
+        }
+
+        #search-container button {
+          width: 80%;
+          font-size: 16px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .navbar {
+          flex-direction: column;
+          padding: 20px 0;
+        }
+
+        .navbar a {
+          margin: 5px 0;
+        }
+
+        #beach-search {
+          width: 95%;
+        }
+
+        #search-container button {
+          width: 95%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="logo">
+        <img src="sea-waves.png" alt="" />
+        <span>SHELLS</span>
+      </div>
+    </div>
+
+    <div id="search-container">
+      <input
+        type="text"
+        id="beach-search"
+        placeholder="Search for a beach..."
+      />
+      <button onclick="searchBeach()">Search</button>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+      <a href="home.html" class="home">
+        <i class="fas fa-home icon"></i>
+      </a>
+      <a href="map.html" class="map">
+        <i class="fas fa-map-marker-alt icon"></i>
+      </a>
+      <a href="settings.html" class="settings">
+        <i class="fas fa-cog icon"></i>
+      </a>
+      <a href="rest.html" class="boats">
+        <i class="fa-solid fa-sailboat icon"></i>
+      </a>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+      const map = L.map("map").setView([20.5937, 78.9629], 5);
+
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "&copy; OpenStreetMap contributors",
+      }).addTo(map);
+
+      const beaches = {
+        "Juhu Beach": {
+          coords: [19.0989, 72.8267],
+          facilities: {
+            lifeguard: [19.0991, 72.8269],
+            parking: [19.0987, 72.8265],
+            restroom: [19.099, 72.827],
+          },
+        },
+        "Bondi Beach": {
+          coords: [-33.8915, 151.2767],
+          facilities: {
+            lifeguard: [-33.8913, 151.2769],
+            parking: [-33.8917, 151.2765],
+            restroom: [-33.8916, 151.277],
+          },
+        },
+
+        "Marina Beach": {
+          coords: [13.05, 80.2824],
+          facilities: {
+            lifeguard: [13.051, 80.283],
+            parking: [13.049, 80.281],
+            restroom: [13.0505, 80.282],
+          },
+        },
+        "Agatti Beach": {
+          coords: [10.85, 72.2],
+          facilities: {
+            lifeguard: [10.851, 72.201],
+            parking: [10.849, 72.199],
+            restroom: [10.8505, 72.2005],
+          },
+        },
+        "Passikudah Beach": {
+          coords: [7.9269, 81.5665],
+          facilities: {
+            lifeguard: [7.9275, 81.567],
+            parking: [7.926, 81.565],
+            restroom: [7.927, 81.566],
+          },
+        },
+        "Velankanni Beach": {
+          coords: [10.6815, 79.8497],
+          facilities: {
+            lifeguard: [10.682, 79.85],
+            parking: [10.681, 79.849],
+            restroom: [10.6818, 79.8495],
+          },
+        },
+        "Kanyakumari Beach": {
+          coords: [8.078, 77.5419],
+          facilities: {
+            lifeguard: [8.0785, 77.5425],
+            parking: [8.0775, 77.541],
+            restroom: [8.0782, 77.5415],
+          },
+        },
+        "Silver Beach": {
+          coords: [11.7, 79.7667],
+          facilities: {
+            lifeguard: [11.701, 79.767],
+            parking: [11.699, 79.766],
+            restroom: [11.7005, 79.7665],
+          },
+        },
+        "Kovalam Beach": {
+          coords: [8.4, 76.978],
+          facilities: {
+            lifeguard: [8.401, 76.979],
+            parking: [8.399, 76.977],
+            restroom: [8.4005, 76.9785],
+          },
+        },
+        "Kavaratti Beach": {
+          coords: [10.5667, 72.6333],
+          facilities: {
+            lifeguard: [10.5675, 72.634],
+            parking: [10.5655, 72.632],
+            restroom: [10.5665, 72.633],
+          },
+        },
+        "Karaikal Beach": {
+          coords: [10.92, 79.84],
+          facilities: {
+            lifeguard: [10.921, 79.841],
+            parking: [10.919, 79.839],
+            restroom: [10.9205, 79.8405],
+          },
+        },
+        "Thiruchendur Beach": {
+          coords: [8.4833, 78.1167],
+          facilities: {
+            lifeguard: [8.484, 78.117],
+            parking: [8.482, 78.116],
+            restroom: [8.4835, 78.1165],
+          },
+        },
+        "Mahabalipuram Beach": {
+          coords: [12.62, 80.1947],
+          facilities: {
+            lifeguard: [12.621, 80.195],
+            parking: [12.619, 80.194],
+            restroom: [12.6205, 80.1945],
+          },
+        },
+        "Yarada Beach": {
+          coords: [17.65, 83.2667],
+          facilities: {
+            lifeguard: [17.651, 83.267],
+            parking: [17.649, 83.266],
+            restroom: [17.6505, 83.2665],
+          },
+        },
+        "Bora Beach": {
+          coords: [16.5, 120.3333],
+          facilities: {
+            lifeguard: [16.501, 120.334],
+            parking: [16.499, 120.332],
+            restroom: [16.5005, 120.3335],
+          },
+        },
+        "Cola Beach": {
+          coords: [15.0, 73.9],
+          facilities: {
+            lifeguard: [15.001, 73.901],
+            parking: [14.999, 73.899],
+            restroom: [15.0005, 73.9005],
+          },
+        },
+        "Miami Beach": {
+          coords: [25.7934, -80.1392],
+          facilities: {
+            lifeguard: [25.794, -80.1395],
+            parking: [25.793, -80.1385],
+            restroom: [25.7937, -80.139],
+          },
+        },
+        "Waikiki Beach": {
+          coords: [21.2767, -157.8275],
+          facilities: {
+            lifeguard: [21.2775, -157.828],
+            parking: [21.2755, -157.827],
+            restroom: [21.2765, -157.8275],
+          },
+        },
+        "Shivrajpur Beach": {
+          coords: [22.35, 69.05],
+          facilities: {
+            lifeguard: [22.351, 69.051],
+            parking: [22.349, 69.049],
+            restroom: [22.3505, 69.0505],
+          },
+        },
+        "Rushikonda Beach": {
+          coords: [17.7833, 83.3833],
+          facilities: {
+            lifeguard: [17.784, 83.384],
+            parking: [17.782, 83.382],
+            restroom: [17.7835, 83.3835],
+          },
+        },
+        "South Beach": {
+          coords: [25.7827, -80.1406],
+          facilities: {
+            lifeguard: [25.7811, -80.1301],
+            parking: [25.783, -80.141],
+            restroom: [25.7815, -80.131],
+          },
+        },
+        "Santa Monica Beach": {
+          coords: [34.0094, -118.4973],
+          facilities: {
+            lifeguard: [34.008, -118.496],
+            parking: [34.01, -118.498],
+            restroom: [34.009, -118.497],
+          },
+        },
+        "Venice Beach": {
+          coords: [33.985, -118.4695],
+          facilities: {
+            lifeguard: [33.984, -118.468],
+            parking: [33.986, -118.47],
+            restroom: [33.9855, -118.469],
+          },
+        },
+        "Malibu Beach": {
+          coords: [34.0259, -118.7798],
+          facilities: {
+            lifeguard: [34.0265, -118.7805],
+            parking: [34.025, -118.779],
+            restroom: [34.026, -118.7795],
+          },
+        },
+        "Huntington Beach": {
+          coords: [33.6595, -117.9988],
+          facilities: {
+            lifeguard: [33.66, -117.999],
+            parking: [33.658, -117.998],
+            restroom: [33.659, -117.9985],
+          },
+        },
+        "Clearwater Beach": {
+          coords: [27.9774, -82.827],
+          facilities: {
+            lifeguard: [27.978, -82.8275],
+            parking: [27.976, -82.826],
+            restroom: [27.977, -82.8265],
+          },
+        },
+        "Virginia Beach": {
+          coords: [36.8529, -75.978],
+          facilities: {
+            lifeguard: [36.8535, -75.9785],
+            parking: [36.852, -75.977],
+            restroom: [36.8525, -75.9775],
+          },
+        },
+        "Ocean City Beach": {
+          coords: [38.3365, -75.0849],
+          facilities: {
+            lifeguard: [38.337, -75.0855],
+            parking: [38.336, -75.084],
+            restroom: [38.3365, -75.0845],
+          },
+        },
+        "Beidaihe Beach": {
+          coords: [39.817, 119.519],
+          facilities: {
+            lifeguard: [39.818, 119.52],
+            parking: [39.816, 119.518],
+            restroom: [39.8175, 119.5195],
+          },
+        },
+        "Xiamen Beach": {
+          coords: [24.4798, 118.0894],
+          facilities: {
+            lifeguard: [24.4805, 118.09],
+            parking: [24.479, 118.088],
+            restroom: [24.4795, 118.089],
+          },
+        },
+        "Sanya Bay": {
+          coords: [18.245, 109.511],
+          facilities: {
+            lifeguard: [18.246, 109.512],
+            parking: [18.244, 109.51],
+            restroom: [18.2455, 109.5115],
+          },
+        },
+        "Yalong Bay": {
+          coords: [18.229, 109.628],
+          facilities: {
+            lifeguard: [18.23, 109.629],
+            parking: [18.228, 109.627],
+            restroom: [18.2295, 109.6285],
+          },
+        },
+        "Dameisha Beach": {
+          coords: [22.594, 114.313],
+          facilities: {
+            lifeguard: [22.595, 114.314],
+            parking: [22.593, 114.312],
+            restroom: [22.5945, 114.3135],
+          },
+        },
+        "Golden Beach Qingdao": {
+          coords: [35.963, 120.198],
+          facilities: {
+            lifeguard: [35.964, 120.199],
+            parking: [35.962, 120.197],
+            restroom: [35.9635, 120.1985],
+          },
+        },
+        "Silver Beach Beihai": {
+          coords: [21.453, 109.123],
+          facilities: {
+            lifeguard: [21.454, 109.124],
+            parking: [21.452, 109.122],
+            restroom: [21.4535, 109.1235],
+          },
+        },
+        "Shilaoren Beach": {
+          coords: [36.102, 120.468],
+          facilities: {
+            lifeguard: [36.103, 120.469],
+            parking: [36.101, 120.467],
+            restroom: [36.1025, 120.4685],
+          },
+        },
+      };
+
+      let markers = [];
+
+      function showBeachMarkers(beachName) {
+        markers.forEach((marker) => map.removeLayer(marker));
+        markers = [];
+
+        const beach = beaches[beachName];
+        if (!beach) {
+          alert("Beach not found!");
+          return;
+        }
+
+        map.setView(beach.coords, 16);
+
+        const beachIcon = L.icon({
+          iconUrl:
+            "https://png.pngtree.com/png-vector/20230106/ourmid/pngtree-flat-red-location-sign-png-image_6553065.png",
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+        });
+
+        const beachMarker = L.marker(beach.coords, { icon: beachIcon })
+          .addTo(map)
+          .bindPopup(`<b>${beachName}</b>`);
+        markers.push(beachMarker);
+
+        const facilityLabels = {
+          lifeguard: "🛑 Lifeguard Tower",
+          parking: "🚗 Parking Lot",
+          restroom: "🚻 Restroom",
+        };
+
+        Object.entries(beach.facilities).forEach(([type, coords]) => {
+          const facilityMarker = L.marker(coords)
+            .addTo(map)
+            .bindPopup(`<b>${facilityLabels[type]}</b>`);
+
+          const beachLatLng = L.latLng(beach.coords);
+          const facilityLatLng = L.latLng(coords);
+          const distance = beachLatLng.distanceTo(facilityLatLng) / 1000;
+
+          facilityMarker.bindTooltip(
+            `${facilityLabels[type]} - ${distance.toFixed(2)} km`,
+            {
+              permanent: true,
+              direction: "top",
+            }
+          );
+
+          markers.push(facilityMarker);
+        });
+      }
+
+      function searchBeach() {
+        const beachNameInput = document
+          .getElementById("beach-search")
+          .value.trim()
+          .toLowerCase();
+        const beachKey = Object.keys(beaches).find(
+          (key) => key.toLowerCase() === beachNameInput
+        );
+
+        if (!beachKey) {
+          alert("Beach not found. Please enter a valid beach name.");
+          return;
+        }
+
+        showBeachMarkers(beachKey);
+      }
+    </script>
+  </body>
+</html>

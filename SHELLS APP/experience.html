@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beach Explorer</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      .navbar {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px 0;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+      }
+
+      .navbar a {
+        text-align: center;
+        color: #888;
+        flex-grow: 1;
+        transition: color 0.3s ease;
+      }
+
+      .navbar a .icon {
+        background-color: white;
+        border: 2px solid #072791;
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 20px;
+        transition: all 0.3s ease;
+        color: #072791;
+        box-shadow: 0 1px 1px #072791;
+      }
+
+      .navbar a.active .icon {
+        background-color: #072791;
+        color: white;
+        /*transform: translateY(-10px);*/
+      }
+
+      .navbar a.active {
+        color: #072791;
+      }
+
+      .navbar a:hover .icon {
+        background-color: #072791;
+        color: white;
+        /* transform: translateY(-10px);*/
+      }
+      body {
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+        background: #add8e6;
+      }
+
+      header {
+        background-color: #072791;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        letter-spacing: 2px;
+        width: 100%;
+      }
+
+      .search-container {
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+      }
+
+      input[type="text"] {
+        width: 80%;
+        padding: 0.6rem;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-right: 0.5rem;
+      }
+
+      button {
+        padding: 0.6rem 1rem;
+        font-size: 1rem;
+        background-color: #0096c7;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+      }
+
+      .button-group {
+        text-align: center;
+        margin-top: 1rem;
+        display: none;
+      }
+
+      .button-group button {
+        margin: 0.5rem;
+      }
+
+      .experience-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1rem;
+      }
+
+      .card {
+        background-color: white;
+        width: 90%;
+        margin-bottom: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .card img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+      }
+
+      .card-content {
+        padding: 1rem;
+      }
+
+      .card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+
+      .card p {
+        font-size: 0.95rem;
+        color: #444;
+        margin-top: 0.5rem;
+      }
+
+      nav {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: #0077b6;
+        display: flex;
+        justify-content: space-around;
+        padding: 0.7rem 0;
+        color: white;
+      }
+
+      nav div {
+        font-size: 1rem;
+      }
+
+      @media (min-width: 600px) {
+        .experience-container {
+          flex-direction: row;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        .card {
+          width: 45%;
+          margin: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>SHELLS</header>
+
+    <div class="search-container">
+      <input
+        type="text"
+        id="beachSearch"
+        placeholder="Search for a beach (e.g., Marina)"
+      />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <div class="button-group" id="options">
+      <button onclick="showExperience('food')">Food</button>
+      <button onclick="showExperience('crafts')">Crafts</button>
+      <button onclick="showExperience('tourist')">Tourist Spot</button>
+    </div>
+
+    <div class="experience-container" id="experienceContainer">
+      <!-- Dynamic cards go here -->
+    </div>
+
+    <nav class="navbar">
+      <a href="home.html" class="home">
+        <i class="fas fa-home icon"></i>
+      </a>
+      <a href="map.html" class="map">
+        <i class="fas fa-map-marker-alt icon"></i>
+      </a>
+      <a href="settings.html" class="settings">
+        <i class="fas fa-cog icon"></i>
+      </a>
+      <a href="rest.html" class="boats">
+        <i class="fa-solid fa-sailboat icon"></i>
+      </a>
+    </nav>
+
+    <script>
+      const data = {
+        "marina beach": {
+          food: [
+            {
+              name: "Sundal",
+              img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd2zCoKbtcLeWAroqhvBt-15E5YZbwvTJSbmGyqCiMlcZLhYfo2cI2HFtPXoPIcfqE1j_ZNMVueLF98-2RBH4xW6II0sqCzAgOdEuvGhBUo_zic5LiNG8KU8SE02C5naOvRE8m1-XWpctnny_maU9N34HK3VI3g5bbV_F2AQqgfjA0IS_siWGxqSV8hA/s3024/20220512_092426-01.jpeg",
+              desc: "Spicy beachside chickpea snack, a Marina favorite.",
+            },
+            {
+              name: "Bhajji",
+              img: "https://kerala.me/wp-content/uploads/2016/04/mulaku-bajji.jpg",
+              desc: "Crispy and hot fritters sold along the shore.",
+            },
+            {
+              name: "Fish Fry",
+              img: "https://imgstaticcontent.lbb.in/lbbnew/wp-content/uploads/2017/09/28075720/SundariAkkaKadai2.jpg",
+              desc: "Crunchy spiral snack made with fish and spices.",
+            },
+          ],
+          crafts: [
+            {
+              name: "Shell Art",
+              img: "https://images.squarespace-cdn.com/content/v1/5c8a0b54aadd342af47c4b43/1559038349395-GDWUVMHY4C7E2YHBC6J9/vintage-shellart-animals-decor-ornament1.jpg?format=1500w",
+              desc: "Beautiful handicrafts made from sea shells.",
+            },
+            {
+              name: "Palm Leaf Baskets",
+              img: "https://www.shopkhoj.com/wp-content/uploads/2018/07/Manjal-1.jpg",
+              desc: "Locally woven baskets from palm leaves.",
+            },
+            {
+              name: "Clay Pots",
+              img: "https://seaexcursions.gr/wp-content/uploads/guides-things-to-do-in-crete-an-ancient-earthenware-amphora-standing-on-a-stone-ledge-by-a-serene-blue-sea-evoking-a-sense-of-timeless-mediterranean-culture.-sea-excursions-greece.jpeg",
+              desc: "Traditional handcrafted clay pots sold by artisans.",
+            },
+          ],
+          tourist: [
+            {
+              name: "Lighthouse",
+              img: "https://www.tamilnadutourism.tn.gov.in/img/pages/large-desktop/lighthouse-chennai-1677298567_02780f5732fac8048d69.webp",
+              desc: "Climb for a panoramic view of the coastline.",
+            },
+            {
+              name: "Santhome Cathedral Basilica",
+              img: "https://catholicshrinebasilica.com/wp-content/uploads/Santhome-Cathedral-Basilica-Chennai-1.webp",
+              desc: "Perfect for walking and enjoying the sea breeze.",
+            },
+            {
+              name: "Gandhi Statue",
+              img: "https://imagesvs.oneindia.com/ta/img/2022/05/b6vsonbcuaawonb-down-1653049513.jpg",
+              desc: "A historic statue and popular photo spot.",
+            },
+          ],
+        },
+        "juhu beach": {
+          food: [
+            {
+              name: "Pav Bhaji",
+              img: "https://lh4.googleusercontent.com/proxy/hcWp7jMD5ir0Cmxk7GJ6fm9OWvoF-syKd7l-TfOFHvPG2PqUrTJ9Oe_gonXTedpYCFtny2xrVWWQM8slGkswSGl_nckoS3yjNDZyzqSlIwu6RH48cnVIFbEvyfciIjUJO1ILEaGEKQZYbSl5lGUK0VvdKRKAZXce3vrTWsXvdTRRA_RFwbQ-VIouer3HtA",
+              desc: "A spicy blend of mashed vegetables served with buttered bread rolls.",
+            },
+            {
+              name: "Vada Pav",
+              img: "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/10/vada-pav-recipe.webp",
+              desc: "Mumbai's iconic potato fritter sandwich.",
+            },
+            {
+              name: "Pani Puri",
+              img: "https://glenindia.com/a/blog/media/glen-india.myshopify.com/Post/featured_img/pani_puri.jpg",
+              desc: "Crispy hollow puris filled with spicy tangy water and fillings.",
+            },
+          ],
+          crafts: [
+            {
+              name: "Shell Jewelry",
+              img: "https://saubhagyavati.in/cdn/shop/files/Shell-Jewellery-For-Bride-Saubhagyavati.in-1695974396602.jpg?v=1695974401",
+              desc: "Handcrafted jewelry made from sea shells.",
+            },
+            {
+              name: "Sand Art",
+              img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjdYdAPnXAd-bBs4H7skjxiZwlX8r4yY2cnw&s",
+              desc: "Intricate designs created using colored sand.",
+            },
+            {
+              name: "Handmade Kites",
+              img: "https://m.media-amazon.com/images/I/71TKBZNUIQL.jpg",
+              desc: "Colorful kites crafted by local artisans.",
+            },
+          ],
+          tourist: [
+            {
+              name: "Juhu Beach",
+              img: "https://assets.simplotel.com/simplotel/image/upload/x_0,y_0,w_1650,h_928,r_0,c_crop,q_90,fl_progressive/w_500,f_auto,c_fit/ramada-plaza-by-wyndham-palm-grove/nitish-raj-FJpRr90K_AU-unsplash_gvex4h",
+              desc: "A popular beach destination known for its street food and sunsets.",
+            },
+            {
+              name: "ISKCON Temple",
+              img: "https://mumbaitourism.co.in/wp-content/uploads/2024/05/ISKCON-Temple-Mumbai.webp",
+              desc: "A serene temple dedicated to Lord Krishna.",
+            },
+            {
+              name: "Prithvi Theatre",
+              img: "https://content.jdmagicbox.com/v2/comp/mumbai/39/022p803939/catalog/prithvi-theatre-juhu-mumbai-auditoriums-jfz3o.jpg",
+              desc: "A hub for performing arts and theater enthusiasts.",
+            },
+          ],
+        },
+        "velankanni beach": {
+          food: [
+            {
+              name: "Sundal",
+              img: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjd2zCoKbtcLeWAroqhvBt-15E5YZbwvTJSbmGyqCiMlcZLhYfo2cI2HFtPXoPIcfqE1j_ZNMVueLF98-2RBH4xW6II0sqCzAgOdEuvGhBUo_zic5LiNG8KU8SE02C5naOvRE8m1-XWpctnny_maU9N34HK3VI3g5bbV_F2AQqgfjA0IS_siWGxqSV8hA/s3024/20220512_092426-01.jpeg",
+              desc: "Spicy beachside chickpea snack, a Marina favorite.",
+            },
+            {
+              name: "Bhajji",
+              img: "https://kerala.me/wp-content/uploads/2016/04/mulaku-bajji.jpg",
+              desc: "Crispy and hot fritters sold along the shore.",
+            },
+            {
+              name: "Fish Fry",
+              img: "https://imgstaticcontent.lbb.in/lbbnew/wp-content/uploads/2017/09/28075720/SundariAkkaKadai2.jpg",
+              desc: "Crunchy spiral snack made with fish and spices.",
+            },
+          ],
+          crafts: [
+            {
+              name: "velankanni silks",
+              img: "https://content.jdmagicbox.com/comp/def_content_category/soft-silk-saree-manufacturers/360-f-983651769-nrffalk1vbxz5lgbiiil2hr1udco39rs-soft-silk-saree-manufacturers-1-6741q-250.jpg",
+              desc: "Traditional tie-dye textiles with vibrant patterns.",
+            },
+            {
+              name: "Wooden Handicrafts",
+              img: "https://m.media-amazon.com/images/I/41y5Wj2DYoL._AC_UF894,1000_QL80_.jpg",
+              desc: "Intricately carved wooden items by local artisans.",
+            },
+            {
+              name: "Terracotta Art",
+              img: "https://www.mptourism.com/web/image/catalog/2024/TerracottaArt-of-Madhya-Pradesh1.jpg",
+              desc: "Earthenware pottery and decorative items.",
+            },
+          ],
+          tourist: [
+            {
+              name: "Basilica of Our Lady of Good Health",
+              img: "https://lh3.googleusercontent.com/gps-cs-s/AB5caB-zithk_qmkggNKAM_4r9CQbXI7aIlIcXxxmJCh3oJndWVO4kWunySMoP9JFk916uN_X3Tg5kxPcugEAsGObtMKYtYX7K6NFTlK2Fo_Z6tMhi6Zy4bYDDNvg_w3vEa-o7gCV6-j=s1360-w1360-h1020-rw",
+              desc: "A church knows for it blessings and history",
+            },
+            {
+              name: "Arulmigu Sri Navaneetheswarar Swami Temple",
+              img: "https://lh3.googleusercontent.com/gpms-cs-s/AIMqDu0PBSAFJAV6ew-_daH3YMZH3e9PJlYCzEA0uSiVtlQtngyQGWja0yeWadqJ0BJbmpRTff_Dl5KAbjnFfp-f-AK8B4XyQ-BuxSCzIq3YzMxCo6ENI-1vdsmsISHDg62ftBgG1K0I=s1360-w1360-h1020-rw",
+              desc: "A sacred Hindu temple dedicated to Lord Shiva.",
+            },
+            {
+              name: "Nagore Dargah Shariff",
+              img: "https://lh3.googleusercontent.com/gps-cs-s/AB5caB-jMamsfVMu6gnLadDUMo1dSl286Ksz2dnLjQkodYRvGtTylhXLrEVQYMwDLCgRCo1Qdkt55cNaGyvFdoOHwm61f3-l010aP7QqkCKiQVXJZ8lXZqjatnha4owOxNrwR207rgo=s1360-w1360-h1020-rw",
+              desc: "An ancient church with intricate carvings.",
+            },
+          ],
+        },
+        "kanyakumari beach": {
+          food: [
+            {
+              name: "Beef curry",
+              img: "https://i.ytimg.com/vi/dgagCkJDFMM/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLBwO1nDJw2cfLQSRTqW_j9U7axHOw",
+              desc: "Spicy beachside chickpea snack, a Marina favorite.",
+            },
+            {
+              name: "Aval Upma",
+              img: "https://www.vegrecipesofindia.com/wp-content/uploads/2015/05/poha-upma-recipe-11-500x500.jpg",
+              desc: "Crispy and hot fritters sold along the shore.",
+            },
+            {
+              name: "Fish Fry",
+              img: "https://imgstaticcontent.lbb.in/lbbnew/wp-content/uploads/2017/09/28075720/SundariAkkaKadai2.jpg",
+              desc: "Crunchy spiral snack made with fish and spices.",
+            },
+          ],
+          crafts: [
+            {
+              name: "lace works",
+              img: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTngO-I7hudp5Xbi5ooSGLTlVCdPaQpochvxw&s",
+              desc: "Traditional tie-dye lace works with vibrant patterns.",
+            },
+            {
+              name: "Wooden Handicrafts",
+              img: "https://m.media-amazon.com/images/I/41y5Wj2DYoL._AC_UF894,1000_QL80_.jpg",
+              desc: "Intricately carved wooden items by local artisans.",
+            },
+            {
+              name: "Temple jewellery",
+              img: "https://www.jewelsmart.in/media/catalog/product/cache/5e5d5507ad17a23dc9f1bc728eeab23c/a/n/antique-temple-jewellery-sets-jewelsmart-21852s.jpg",
+              desc: "Antique temple design jewellery with aesthetic finishing",
+            },
+          ],
+          tourist: [
+            {
+              name: "Thiruvalluvar Statue",
+              img: "https://www.tamilnadutourism.tn.gov.in/img/pages/mobile/kanyakumari-1655354775_70ffcca22ad83db7094c.webp",
+              desc: "A statue knows for it kural and history",
+            },
+            {
+              name: "Suchindram Shree Thanumalayan Swamy Temple",
+              img: "https://lh3.googleusercontent.com/gpms-cs-s/AIMqDu0PBSAFJAV6ew-_daH3YMZH3e9PJlYCzEA0uSiVtlQtngyQGWja0yeWadqJ0BJbmpRTff_Dl5KAbjnFfp-f-AK8B4XyQ-BuxSCzIq3YzMxCo6ENI-1vdsmsISHDg62ftBgG1K0I=s1360-w1360-h1020-rw",
+              desc: "A sacred Hindu temple dedicated to Lord Shiva.",
+            },
+            {
+              name: "Mahatma Gandhi Mandapam",
+              img: "https://lh3.googleusercontent.com/gps-cs-s/AB5caB-Dl9yDQqPNhUYwRKYr6U5_bk-w5q70Outz6eAnMZRkKplfBhIkOUazHwybQcoPo5YKX6BeA-prnsLaGeQaPSwMcJWLIsCiWBdKNos9fUU7MIXAbTmsLjAQEkzKZ7KqRYkmNaBy_g=s1360-w1360-h1020-rw",
+              desc: "An ancient palace with intricate carvings.",
+            },
+          ],
+        },
+      };
+
+      document
+        .getElementById("searchBtn")
+        .addEventListener("click", function () {
+          const input = document
+            .getElementById("beachSearch")
+            .value.trim()
+            .toLowerCase();
+          const options = document.getElementById("options");
+          const container = document.getElementById("experienceContainer");
+
+          container.innerHTML = "";
+          if (data[input]) {
+            options.style.display = "block";
+          } else {
+            options.style.display = "none";
+          }
+        });
+
+      function showExperience(type) {
+        const beach = document
+          .getElementById("beachSearch")
+          .value.trim()
+          .toLowerCase();
+        const container = document.getElementById("experienceContainer");
+        container.innerHTML = "";
+
+        if (!data[beach] || !data[beach][type]) return;
+
+        data[beach][type].forEach((item) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+          <img src="${item.img}" alt="${item.name}">
+          <div class="card-content">
+            <h3>${item.name}</h3>
+            <p>${item.desc}</p>
+          </div>
+        `;
+          container.appendChild(card);
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beach Info</title>
+    <link rel="stylesheet" href="entry.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #ffffff;
+        color: #072791;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 0px;
+        padding: 0px;
+        min-height: 100vh;
+        flex-direction: column;
+      }
+
+      .header {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 490px;
+        background-color: #072791;
+        margin: 0;
+        border-radius: 1px;
+        color: white;
+      }
+
+      .home-icon {
+        font-size: 28px;
+        cursor: pointer;
+        margin-right: 10px;
+      }
+
+      .container {
+        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_6yCsuUQu_eNfxx_N4kPDcmwKMpey-S4sPA&s");
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: 40px;
+        border-radius: 1px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        width: 80%;
+        max-width: 500px;
+        flex-grow: 1;
+        margin-top: 0px;
+      }
+
+      input[type="text"] {
+        width: 90%;
+        padding: 12px;
+        border-radius: 24px;
+        border: 1px solid #072791;
+        margin-bottom: 15px;
+        outline: none;
+        color: #072791;
+      }
+
+      button {
+        padding: 12px;
+        width: 100%;
+        background-color: #072791;
+        color: white;
+        border: none;
+        border-radius: 24px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      button:hover {
+        background-color: #051f56;
+      }
+
+      #infoBox {
+        margin-top: 20px;
+        text-align: left;
+        padding: 15px;
+        border-radius: 8px;
+        background: rgba(7, 39, 145, 0.2); /* Light blue background */
+        display: none;
+        color: #072791;
+        font-weight: bolder;
+        transition: all 0.3s ease-in-out;
+      }
+
+      #infoBox img {
+        margin-top: 15px;
+        max-width: 100%;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        margin-left: 2px;
+      }
+
+      /* Glassmorphism effect */
+      .glass-container {
+        background: rgba(7, 39, 145, 0.3); /* Blue with transparency */
+        /* Apply blur effect */
+        border-radius: 15px;
+        padding: 20px;
+        color: white;
+        box-shadow: 0 4px 15px blue;
+      }
+      .navbar {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        padding: 10px 0;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        box-shadow: 0px -4px 10px rgba(0, 0, 0, 0.2);
+        position: fixed;
+        bottom: 0;
+      }
+
+      .navbar a {
+        text-align: center;
+        color: #888;
+        flex-grow: 1;
+        transition: color 0.3s ease;
+      }
+
+      .navbar a .icon {
+        background-color: white;
+        border: 2px solid #072791;
+        border-radius: 50%;
+        padding: 10px;
+        font-size: 20px;
+        transition: all 0.3s ease;
+        color: #072791;
+        box-shadow: 0 1px 1px #072791;
+      }
+
+      .navbar a.active {
+        color: #072791;
+      }
+
+      .navbar a:hover .icon {
+        background-color: #072791;
+        color: white;
+        /* transform: translateY(-10px);*/
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h2 style="margin-left: 12px">SHELLS</h2>
+    </div>
+
+    <div class="container">
+      <h2>Discover More About the Beach</h2>
+      <input type="text" id="search" placeholder="Search for a beach..." />
+      <button id="searchButton">Search</button>
+
+      <div id="infoBox" class="glass-container">
+        <h3 id="beachName"></h3>
+        <p><strong>Entry Fees:</strong> <span id="entryFee"></span></p>
+        <p><strong>Best Time to Visit:</strong> <span id="bestTime"></span></p>
+        <p><strong>Things to Do:</strong> <span id="thingsToDo"></span></p>
+        <img id="beachImage" src="" alt="Beach Image" />
+      </div>
+    </div>
+    <div class="navbar">
+      <a href="home.html" class="home">
+        <i class="fas fa-home icon"></i>
+      </a>
+      <a href="map.html" class="map">
+        <i class="fas fa-map-marker-alt icon"></i>
+      </a>
+      <a href="settings.html" class="settings">
+        <i class="fas fa-cog icon"></i>
+      </a>
+      <a href="boat.html" class="boats">
+        <i class="fa-solid fa-sailboat icon"></i>
+      </a>
+    </div>
+
+    <script>
+      const beachData = {
+        "Marina Beach": {
+          bestTime: "November to February",
+          entryFee: "Free",
+          thingsToDo:
+            "Enjoy horse riding, fly kites, savour local street food, take long walks along the beach",
+          imageUrl:
+            "https://s7ap1.scene7.com/is/image/incredibleindia/marina-beach-chennai-tamil-nadu-4-attr-hero?qlt=82&ts=1726655007714", // Replace with actual beach image URL
+        },
+        "Varkala Beach": {
+          bestTime: "October to March",
+          entryFee: "Free",
+          thingsToDo:
+            "Surfing, Yoga retreats, Visit the cliffs, Explore local markets",
+          imageUrl:
+            "https://www.theraviz.com/wp-content/uploads/2024/04/Varkala-Cliff-%E2%80%93-The-First-National-Geopark.jpg", // Replace with actual beach image URL
+        },
+        "Juhu Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo:
+            "Enjoy street food, Visit ISKCON temple, Watch sunset, Horse riding",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png", // Replace with actual beach image URL
+        },
+        "Medila Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Snorkeling, Relax on the beach, Explore nearby villages",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Paradise Beach": {
+          bestTime: "November to April",
+          entryFee: "30/-",
+          thingsToDo: "Snorkeling, Relax on the beach, Explore nearby villages",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Passikutha Beach": {
+          bestTime: "May to September",
+          entryFee: "Free",
+          thingsToDo: "Scuba diving, Wind surfing, Beach volleyball",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Velas Beach": {
+          bestTime: "November to March",
+          entryFee: "Free",
+          thingsToDo: "Turtle watching, Beach camping, Nature walks",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Yarada Beach": {
+          bestTime: "October to March",
+          entryFee: "Free",
+          thingsToDo: "Swimming, Picnicking, Photography",
+          imageUrl:
+            "https://d104tpg70nvstz.cloudfront.net/2016/09/Passikudah-header-image-mobile-3.jpg",
+        },
+        "Diu Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo: "Water sports, Visit Diu Fort, Explore Naida Caves",
+          imageUrl:
+            "https://d104tpg70nvstz.cloudfront.net/2016/09/Passikudah-header-image-mobile-3.jpg",
+        },
+        "Velankanni Beach": {
+          bestTime: "October to March",
+          entryFee: "Free",
+          thingsToDo: "Visit the Basilica, Beach walks, Local shopping",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Vaduva Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Relax on the beach, Bird watching, Fishing",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Agatti Beach": {
+          bestTime: "October to March",
+          entryFee: "Free",
+          thingsToDo: "Snorkeling, Kayaking, Explore coral reefs",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Kalametiya Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Bird watching, Boat rides, Nature trails",
+          imageUrl:
+            "https://yatrirailways.com/bl-content/uploads/pages/4c7c6ba1f469c2edae5c7a267354101e/Juhu-Beach.png",
+        },
+        "Arasimile Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Beach walks, Fishing, Relaxing",
+          imageUrl:
+            "https://ceylonpulse.com/wp-content/uploads/2023/08/c_8.webp",
+        },
+        "Gthalayadi Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Swimming, Sunbathing, Beach games",
+        },
+        "Waikiki Beach": {
+          bestTime: "April to October",
+          entryFee: "Free",
+          thingsToDo: "Surfing, Shopping, Dining",
+        },
+        "Bordi Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo: "Beach walks, Visit chikoo orchards, Relaxing",
+          imageUrl:
+            "https://ceylonpulse.com/wp-content/uploads/2023/08/c_8.webp",
+        },
+        "Rushikonda Beach": {
+          bestTime: "October to February",
+          entryFee: "Rs. 20/-",
+          thingsToDo: "Beach walks, Visit chikoo orchards, Relaxing",
+          imageUrl:
+            "https://www.theraviz.com/wp-content/uploads/2024/04/Varkala-Cliff-%E2%80%93-The-First-National-Geopark.jpg",
+        },
+        "Boga Beach": {
+          bestTime: "November to April",
+          entryFee: "Free",
+          thingsToDo: "Snorkeling, Beach volleyball, Relaxing",
+          imageUrl:
+            "https://ceylonpulse.com/wp-content/uploads/2023/08/c_8.webp",
+        },
+        "Porbandar Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo: "Visit Kirti Mandir, Beach walks, Local shopping",
+          imageUrl:
+            "https://www.theraviz.com/wp-content/uploads/2024/04/Varkala-Cliff-%E2%80%93-The-First-National-Geopark.jpg",
+        },
+        "Miami Beach": {
+          bestTime: "March to May",
+          entryFee: "Free",
+          thingsToDo: "Nightlife, Water sports, Shopping",
+          imageUrl:
+            "https://d104tpg70nvstz.cloudfront.net/2016/09/Passikudah-header-image-mobile-3.jpg",
+        },
+        "Cannon Beach": {
+          bestTime: "June to September",
+          entryFee: "Free",
+          thingsToDo: "Visit Haystack Rock, Beach walks, Photography",
+          imageUrl:
+            "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/71/9a/c1/amaya-beach.jpg?w=700&h=-1&s=1",
+        },
+        "Ullal Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo: "Swimming, Visit Someshwara Temple, Relaxing",
+          imageUrl:
+            "https://cdn.thatch.co/cdn-cgi/image/width=3840,format=webp/images/358004/xre98b.png",
+        },
+        "Ubharat Beach": {
+          bestTime: "October to February",
+          entryFee: "Free",
+          thingsToDo: "Beach walks, Picnicking, Relaxing",
+          imageUrl:
+            "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/71/9a/c1/amaya-beach.jpg?w=700&h=-1&s=1",
+        },
+        "Marari Beach": {
+          bestTime: "September to March",
+          entryFee: "Free",
+          thingsToDo: "Ayurvedic treatments, Fishing, Beach walks",
+          imageUrl:
+            "https://cdn.thatch.co/cdn-cgi/image/width=3840,format=webp/images/358004/xre98b.png",
+        },
+        "Serenity Beach": {
+          bestTime: "October to March",
+          entryFee: "Free",
+          thingsToDo: "Surfing, Beach walks, Relaxing",
+          imageUrl:
+            "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/11/71/9a/c1/amaya-beach.jpg?w=700&h=-1&s=1",
+        },
+      };
+
+      document
+        .getElementById("searchButton")
+        .addEventListener("click", function () {
+          const searchValue = document
+            .getElementById("search")
+            .value.toLowerCase();
+          const beach = Object.keys(beachData).find(
+            (name) => name.toLowerCase() === searchValue
+          );
+
+          if (beach) {
+            const data = beachData[beach];
+            document.getElementById("beachName").innerText = beach;
+            document.getElementById("entryFee").innerText = data.entryFee;
+            document.getElementById("bestTime").innerText = data.bestTime;
+            document.getElementById("thingsToDo").innerText = data.thingsToDo;
+            document.getElementById("beachImage").src = data.imageUrl;
+            document.getElementById("infoBox").style.display = "block";
+          } else {
+            document.getElementById("infoBox").style.display = "none";
+            alert("Beach not found. Please try again.");
+          }
+        });
+
+      function goToHome() {
+        window.location.href = "home.html";
+      }
+    </script>
+  </body>
+</html>

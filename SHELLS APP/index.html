@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surf More</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: url("bk.jpg") no-repeat center center/cover;
+      }
+      .container {
+        text-align: center;
+      }
+      .logo {
+        width: 120px;
+        height: auto;
+        margin-left: 20px;
+      }
+      .button {
+        margin-top: 20px;
+        padding: 12px 24px;
+        font-size: 18px;
+        font-weight: bold;
+        color: rgb(16, 11, 11);
+        background: rgba(244, 239, 239, 0.856);
+        backdrop-filter: blur(10px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+      .button:hover {
+        background: rgba(255, 255, 255, 0.3);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <img src="sea-waves2.png" alt="Sea Waves Logo" class="logo" /><br />
+      <button class="button" onclick="window.location.href='home.html'">
+        Surf More
+      </button>
+    </div>
+  </body>
+</html>

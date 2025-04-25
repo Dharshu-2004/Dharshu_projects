@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beach Suitability App</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
+    />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <i class="bx bx-home-heart home-icon" onclick="goToHome()"></i>
+
+        <h1>Beach Location</h1>
+        <div id="full">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search for a beach..."
+          />
+          <button id="go-button" onclick="onGoButtonClick()">Go</button>
+        </div>
+      </header>
+      <div id="map"></div>
+      <div id="beachDetails"></div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
