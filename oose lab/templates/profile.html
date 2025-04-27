@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile</title>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('catalogue') }}">Catalogue</a></li>
+        <li><a href="{{ url_for('profile') }}">Profile</a></li>
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      </ul>
+    </nav>
+
+    <h1>Profile</h1>
+
+    <p><strong>Username:</strong> {{ user['username'] }}</p>
+    <p><strong>Registered Courses:</strong></p>
+
+    {% if courses %}
+    <ul>
+      {% for course in courses %}
+      <li>{{ course['course_name'] }} - {{ course['course_description'] }}</li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p>You haven't registered for any courses yet.</p>
+    {% endif %}
+  </body>
+</html>

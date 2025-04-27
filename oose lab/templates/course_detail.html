@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{ course['course_name'] }} - Course Details</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      .course-detail {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar {
+        background-color: #004c99;
+        padding: 15px;
+        text-align: right;
+      }
+
+      .navbar a {
+        color: white;
+        margin-left: 20px;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .navbar a:hover {
+        text-decoration: underline;
+      }
+
+      .payment-section {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #ddd;
+      }
+
+      .payment-section img {
+        margin: 15px 0;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-field {
+        margin-bottom: 15px;
+      }
+
+      .form-field input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+      }
+
+      button {
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      strong {
+        color: #333;
+      }
+
+      .closed {
+        color: red;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="navbar">
+      <a href="{{ url_for('catalogue') }}">Back to Catalogue</a>
+      <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+
+    <div class="course-detail">
+      <h1>{{ course['course_name'] }}</h1>
+      <p><strong>Description:</strong> {{ course['course_description'] }}</p>
+      <p><strong>Duration:</strong> {{ course['course_duration'] }}</p>
+      <p><strong>Instructor:</strong> {{ course['instructor'] }}</p>
+      <p><strong>Price:</strong> ₹{{ course['price'] }}</p>
+      <p><strong>Registered:</strong> {{ registered_count }} / 10</p>
+
+      {% if registered_count < 10 %}
+      <div class="payment-section">
+        <h3>Pay Now</h3>
+        <p><strong>UPI ID:</strong> dharshini@xyzbank</p>
+        <p>Or scan the QR code below:</p>
+        <img
+          src="{{ url_for('static', filename='qr.png') }}"
+          alt="UPI QR Code"
+          width="200"
+        />
+        <p>
+          <a
+            href="upi://pay?pa=dharshini@xyzbank&pn=Dharshini+R&mc=0000&mode=02&cu=INR"
+            target="_blank"
+          >
+            <button>Pay via UPI App</button>
+          </a>
+        </p>
+
+        <form
+          action="{{ url_for('course_detail', course_id=course['_id']) }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <div class="form-field">
+            <label for="txn_id">Transaction ID:</label>
+            <input type="text" name="txn_id" required />
+          </div>
+
+          <div class="form-field">
+            <label for="screenshot">Upload Payment Screenshot:</label>
+            <input type="file" name="screenshot" accept="image/*" required />
+          </div>
+
+          <button type="submit">Register</button>
+        </form>
+      </div>
+      {% else %}
+      <p class="closed">Registration Closed</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
